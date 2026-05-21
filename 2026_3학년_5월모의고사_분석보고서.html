@@ -328,10 +328,29 @@
       </div>
     </div>
 
-    <div class="card chart-card">
-      <div class="chart-title">3월 → 5월 등급 분포 변화 (학교)</div>
-      <div class="chart-desc">국·수·영·한국사 각 등급 비율의 3월 대비 변화량 · 단위 %p</div>
-      <div class="chart-box tall"><canvas id="deltaChart"></canvas></div>
+    <div class="block-title" style="margin-top:36px;">과목별 3월 → 5월 등급 분포 비교</div>
+    <div class="block-desc">각 과목별로 3월(연한 막대)과 5월(진한 막대) 등급 분포를 나란히 비교 · 단위 % · 가로축은 등급</div>
+    <div class="cgrid2">
+      <div class="card chart-card">
+        <div class="chart-title">국어 <span class="cnt">· 5등급 +8.2%p 적체 신규</span></div>
+        <div class="chart-desc">3·4등급은 감소, 5등급으로 후퇴 — 약점 집단 +16명</div>
+        <div class="chart-box sm"><canvas id="dt_kor"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">수학 <span class="cnt">· 4~5등급 +5.1%p 심화</span></div>
+        <div class="chart-desc">2·3등급 감소 → 4·5등급으로 추가 후퇴, 상위권 추가 이탈</div>
+        <div class="chart-box sm"><canvas id="dt_mat"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">영어 <span class="cnt">· 1~2등급 +13.0%p</span></div>
+        <div class="chart-desc">4·5등급에서 1·2·3등급으로 대거 이동 — 전국도 동시 상승</div>
+        <div class="chart-box sm"><canvas id="dt_eng"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">한국사 <span class="cnt">· 양극화 완화</span></div>
+        <div class="chart-desc">6등급 −10.1%p, 4등급으로 이동 — 절대평가 등급 컷 인근 학생 증가</div>
+        <div class="chart-box sm"><canvas id="dt_his"></canvas></div>
+      </div>
     </div>
 
     <div class="callout">
@@ -799,31 +818,48 @@ Chart.defaults.font.family="'Pretendard',sans-serif";
 Chart.defaults.color=inkSoft;
 Chart.defaults.font.size=12;
 
-/* ========== 0. delta chart (3월→5월 등급별 변화량) ========== */
+/* ========== 0. 과목별 3월→5월 등급 분포 비교 ========== */
 const labels9=['1','2','3','4','5','6','7','8','9'];
-// 5월 - 3월 (학교 기준)
-const dKor=[0.56,0.07,-3.65,-3.08,8.16,-2.07,0.02,-0.53,0.54];
-const dMat=[0.01,-2.65,-1.55,3.37,1.77,-0.46,3.25,-1.59,-2.13];
-const dEng=[5.92,7.07,4.45,-8.46,-9.05,-1.03,0.55,0.01,0.54];
-const dHis=[-0.48,-0.48,3.85,10.84,-2.59,-10.10,0.04,-1.07,0.00];
-new Chart(document.getElementById('deltaChart'),{
-  type:'bar',
-  data:{labels:labels9,
-    datasets:[
-      {label:'국어',data:dKor,backgroundColor:clay,borderRadius:3,barPercentage:.8,categoryPercentage:.84},
-      {label:'수학',data:dMat,backgroundColor:navy,borderRadius:3,barPercentage:.8,categoryPercentage:.84},
-      {label:'영어',data:dEng,backgroundColor:teal,borderRadius:3,barPercentage:.8,categoryPercentage:.84},
-      {label:'한국사',data:dHis,backgroundColor:gold,borderRadius:3,barPercentage:.8,categoryPercentage:.84}
-    ]},
-  options:{maintainAspectRatio:false,
-    plugins:{legend:{position:'bottom',labels:{padding:14}},
-      tooltip:{callbacks:{title:c=>c[0].label+'등급',
-        label:c=>c.dataset.label+': '+(c.raw>0?'+':'')+c.raw.toFixed(2)+'%p'}}},
-    scales:{y:{grid:{color:line},
-      ticks:{callback:v=>(v>0?'+':'')+v+'%p'},
-      title:{display:true,text:'3월 대비 변화량(%p)',color:'#8a8170'}},
-      x:{grid:{display:false},title:{display:true,text:'등급',color:'#8a8170'}}}}
-});
+function compareChart(id,marData,mayData,cMain,cLight){
+  new Chart(document.getElementById(id),{
+    type:'bar',
+    data:{labels:labels9,
+      datasets:[
+        {label:'3월',data:marData,backgroundColor:cLight,borderRadius:3,
+         barPercentage:.78,categoryPercentage:.84},
+        {label:'5월',data:mayData,backgroundColor:cMain,borderRadius:3,
+         barPercentage:.78,categoryPercentage:.84}
+      ]},
+    options:{maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{padding:10,boxWidth:12,font:{size:11.5}}},
+        tooltip:{callbacks:{title:c=>c[0].label+'등급',
+          label:c=>{
+            const i=c.dataIndex;
+            const delta=mayData[i]-marData[i];
+            const sign=delta>0?'+':'';
+            return c.dataset.label+': '+c.raw.toFixed(2)+'%' +
+              (c.datasetIndex===1?' ('+sign+delta.toFixed(2)+'%p)':'');
+          }}}},
+      scales:{y:{beginAtZero:true,grid:{color:line},ticks:{callback:v=>v+'%'}},
+        x:{grid:{display:false},title:{display:true,text:'등급',font:{size:11},color:'#8a8170'}}}}
+  });
+}
+compareChart('dt_kor',
+  [3.74,11.76,21.39,27.27,17.65,13.90,3.74,0.53,0.00],
+  [4.30,11.83,17.74,24.19,25.81,11.83,3.76,0.00,0.54],
+  clay,'#e3c9bf');
+compareChart('dt_mat',
+  [1.07,6.95,12.30,27.81,28.34,13.90,4.28,2.67,2.67],
+  [1.08,4.30,10.75,31.18,30.11,13.44,7.53,1.08,0.54],
+  navy,'#c2cad6');
+compareChart('dt_eng',
+  [2.14,14.44,27.27,27.81,16.04,8.02,3.21,1.07,0.00],
+  [8.06,21.51,31.72,19.35,6.99,6.99,3.76,1.08,0.54],
+  teal,'#bcccc9');
+compareChart('dt_his',
+  [10.16,10.70,14.97,16.04,18.18,21.93,6.95,1.07,0.00],
+  [9.68,10.22,18.82,26.88,15.59,11.83,6.99,0.00,0.00],
+  gold,'#e6d4ad');
 
 /* ========== 1. donut ========== */
 new Chart(document.getElementById('tierDonut'),{
