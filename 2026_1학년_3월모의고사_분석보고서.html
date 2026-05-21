@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 3월 모의고사 분석 보고서 — 경주여고 1학년</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --ink:#0e0e10;
+  --paper:#f5f1e8;
+  --paper-2:#ede7d6;
+  --rule:#1f1f24;
+  --accent:#c5392c;       /* 위험 빨강 */
+  --accent-2:#1d3557;     /* 진한 네이비 */
+  --accent-3:#e9a23b;     /* 경고 황색 */
+  --accent-4:#2d6a4f;     /* 양호 녹색 */
+  --grid:rgba(14,14,16,.08);
+  --tag:#1f1f24;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans KR',sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+body{
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(197,57,44,.06), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(29,53,87,.08), transparent 60%),
+    var(--paper);
+  min-height:100vh;
+}
+
+/* === Top ribbon === */
+.ribbon{
+  background:var(--ink);color:var(--paper);
+  border-bottom:3px solid var(--accent);
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:.18em;
+  padding:8px 32px;display:flex;justify-content:space-between;text-transform:uppercase;
+}
+
+/* === Masthead === */
+.masthead{
+  padding:48px 32px 24px;
+  border-bottom:1px solid var(--rule);
+  position:relative;
+}
+.masthead .kicker{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.25em;
+  color:var(--accent);text-transform:uppercase;margin-bottom:14px;
+}
+.masthead h1{
+  font-family:'Gowun Batang',serif;font-weight:700;
+  font-size:clamp(38px,5.5vw,68px);line-height:1.05;letter-spacing:-.02em;
+  margin-bottom:18px;
+}
+.masthead h1 .accent{color:var(--accent)}
+.masthead .sub{
+  font-size:16px;color:#444;max-width:780px;margin-bottom:24px;
+}
+.meta-row{
+  display:flex;gap:24px;flex-wrap:wrap;
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:#555;padding-top:18px;border-top:1px solid var(--grid);
+}
+.meta-row span b{color:var(--ink);font-weight:700}
+
+/* === Section === */
+section{
+  padding:56px 32px;border-bottom:1px solid var(--rule);
+  max-width:1400px;margin:0 auto;
+}
+.sec-head{
+  display:flex;align-items:baseline;gap:18px;margin-bottom:32px;
+  border-bottom:2px solid var(--ink);padding-bottom:10px;
+}
+.sec-num{
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  background:var(--ink);color:var(--paper);padding:4px 10px;letter-spacing:.1em;
+}
+.sec-title{
+  font-family:'Gowun Batang',serif;font-size:32px;font-weight:700;letter-spacing:-.01em;
+}
+.sec-kicker{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;
+  color:#777;text-transform:uppercase;margin-left:auto;
+}
+
+/* === KPI cards === */
+.kpi-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  border:2px solid var(--ink);background:var(--paper-2);
+}
+.kpi{
+  padding:24px;border-right:1px solid var(--rule);
+  position:relative;
+}
+.kpi:last-child{border-right:none}
+.kpi .label{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:#666;margin-bottom:14px;
+}
+.kpi .value{
+  font-family:'Gowun Batang',serif;font-size:54px;font-weight:700;line-height:1;
+}
+.kpi .unit{font-size:18px;color:#555;margin-left:4px}
+.kpi .delta{
+  font-family:'JetBrains Mono',monospace;font-size:12px;margin-top:10px;
+  display:inline-block;padding:3px 8px;
+}
+.kpi .delta.bad{background:var(--accent);color:#fff}
+.kpi .delta.good{background:var(--accent-4);color:#fff}
+.kpi .note{font-size:12px;color:#666;margin-top:8px}
+
+/* === Big chart grid === */
+.chart-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:32px;margin-top:32px}
+.chart-card{
+  background:#fff;border:1.5px solid var(--ink);padding:24px;position:relative;
+  box-shadow:6px 6px 0 var(--ink);
+}
+.chart-card h3{
+  font-family:'Gowun Batang',serif;font-size:20px;font-weight:700;margin-bottom:6px;
+}
+.chart-card .desc{
+  font-size:13px;color:#666;margin-bottom:18px;
+  font-family:'JetBrains Mono',monospace;letter-spacing:.05em;
+}
+.chart-wrap{position:relative;height:340px}
+.chart-wrap.tall{height:480px}
+
+/* === Diagnosis cards === */
+.diag-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:28px}
+.diag{
+  border:1.5px solid var(--ink);padding:16px;background:#fff;
+  display:flex;flex-direction:column;gap:8px;
+}
+.diag.red{background:#c5392c;color:#fff;border-color:#c5392c}
+.diag.amber{background:#e9a23b;color:#1f1f24}
+.diag.green{background:#2d6a4f;color:#fff;border-color:#2d6a4f}
+.diag.neutral{background:var(--paper-2)}
+.diag .nm{font-family:'Gowun Batang',serif;font-size:20px;font-weight:700}
+.diag .row{display:flex;justify-content:space-between;font-size:12px;font-family:'JetBrains Mono',monospace}
+.diag .row b{font-weight:700;font-size:14px}
+.diag .verdict{
+  margin-top:6px;font-size:12px;letter-spacing:.02em;
+  padding-top:8px;border-top:1px solid currentColor;opacity:.85;
+}
+
+/* === Two-column layout === */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:28px}
+@media (max-width:980px){.two-col{grid-template-columns:1fr}.chart-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.diag-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* === Group cards === */
+.group-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:2px solid var(--ink);margin-top:24px}
+.gcard{
+  padding:24px;border-right:1px solid var(--rule);background:#fff;
+  display:flex;flex-direction:column;
+}
+.gcard:last-child{border-right:none}
+.gcard .tag{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;
+  display:inline-block;padding:3px 8px;color:#fff;width:fit-content;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.gcard.top .tag{background:var(--accent-4)}
+.gcard.mu .tag{background:var(--accent-2)}
+.gcard.ml .tag{background:var(--accent-3);color:#1f1f24}
+.gcard.bot .tag{background:var(--accent)}
+.gcard .num{font-family:'Gowun Batang',serif;font-size:46px;font-weight:700;line-height:1}
+.gcard .of{font-size:14px;color:#666;margin-top:4px}
+.gcard .desc{font-size:13px;color:#444;margin-top:14px;line-height:1.6}
+
+/* === Strategy table === */
+.strategy{
+  border:1.5px solid var(--ink);background:#fff;
+  margin-top:18px;overflow:hidden;
+}
+.strat-head{
+  display:grid;grid-template-columns:140px 1fr 1fr 1fr 1fr;
+  background:var(--ink);color:var(--paper);
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.strat-head>div{padding:12px 16px;border-right:1px solid #333}
+.strat-head>div:last-child{border-right:none}
+.strat-row{
+  display:grid;grid-template-columns:140px 1fr 1fr 1fr 1fr;
+  border-top:1px solid var(--rule);
+}
+.strat-row>div{padding:18px 16px;border-right:1px solid var(--grid);font-size:13.5px;line-height:1.55}
+.strat-row>div:last-child{border-right:none}
+.strat-row .label{
+  font-family:'Gowun Batang',serif;font-weight:700;font-size:18px;
+  background:var(--paper-2);
+}
+.strat-row .label .sub{font-family:'IBM Plex Sans KR';font-size:11px;color:#666;font-weight:400;display:block;margin-top:4px}
+.strat-row ul{padding-left:18px}
+.strat-row li{margin-bottom:6px}
+.strat-row li b{color:var(--accent)}
+
+/* === Class table === */
+.cls-table{
+  width:100%;border-collapse:collapse;margin-top:18px;font-size:13px;background:#fff;
+  border:1.5px solid var(--ink);
+}
+.cls-table th{
+  background:var(--ink);color:var(--paper);padding:12px 10px;text-align:center;
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  font-weight:500;
+}
+.cls-table td{padding:11px 10px;text-align:center;border-bottom:1px solid var(--grid)}
+.cls-table td.cn{font-family:'Gowun Batang',serif;font-weight:700;font-size:16px;background:var(--paper-2)}
+.cls-table td.num{font-family:'JetBrains Mono',monospace}
+.cls-table tr.best td.num.hl{background:#d8f3dc;font-weight:700}
+.cls-table tr.worst td.num.hl{background:#ffd6cc;font-weight:700}
+
+/* === Timeline === */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:18px;border:2px solid var(--ink)}
+.week{
+  padding:24px;background:#fff;border-right:1px solid var(--rule);position:relative;
+}
+.week:last-child{border-right:none}
+.week .wk{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;
+  background:var(--ink);color:#fff;display:inline-block;padding:4px 10px;margin-bottom:14px;
+}
+.week h4{font-family:'Gowun Batang',serif;font-size:20px;font-weight:700;margin-bottom:14px}
+.week ul{padding-left:18px;font-size:13px;line-height:1.7}
+.week li{margin-bottom:6px}
+
+/* === Cause cards === */
+.cause-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+.cause{
+  background:#fff;border:1.5px solid var(--ink);padding:24px;
+  position:relative;border-left:6px solid var(--accent);
+}
+.cause:nth-child(2){border-left-color:var(--accent-3)}
+.cause:nth-child(3){border-left-color:var(--accent-2)}
+.cause h4{font-family:'Gowun Batang',serif;font-size:20px;font-weight:700;margin-bottom:14px}
+.cause ul{padding-left:18px;font-size:13.5px;line-height:1.65}
+.cause li{margin-bottom:8px}
+
+/* === Long-term === */
+.lt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+.lt{
+  padding:24px;background:linear-gradient(135deg,var(--ink) 0%,#2a2a30 100%);color:var(--paper);
+}
+.lt .horizon{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+  color:var(--accent-3);text-transform:uppercase;margin-bottom:10px;
+}
+.lt h4{font-family:'Gowun Batang',serif;font-size:22px;font-weight:700;margin-bottom:14px}
+.lt ul{padding-left:18px;font-size:13.5px;line-height:1.65;color:#ddd}
+.lt li{margin-bottom:6px}
+.lt li b{color:var(--accent-3);font-weight:600}
+
+/* === Footer === */
+footer{
+  background:var(--ink);color:var(--paper);padding:32px;text-align:center;
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;
+}
+footer .ln{margin:6px 0;color:#888}
+footer b{color:var(--accent-3)}
+
+/* === Decorative === */
+.flourish{
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:#999;
+  display:flex;align-items:center;gap:8px;margin:18px 0 8px;letter-spacing:.2em;
+}
+.flourish::before,.flourish::after{content:"";flex:1;height:1px;background:var(--grid)}
+
+.callout{
+  background:var(--ink);color:var(--paper);padding:20px 24px;margin-top:24px;
+  border-left:6px solid var(--accent);
+}
+.callout .lbl{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;
+  color:var(--accent-3);text-transform:uppercase;margin-bottom:8px;
+}
+.callout .txt{font-size:15px;line-height:1.6}
+
+/* numbers in tags */
+.pill{
+  display:inline-block;padding:2px 8px;font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:.05em;background:var(--paper-2);border:1px solid var(--ink);
+}
+.pill.red{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pill.green{background:var(--accent-4);color:#fff;border-color:var(--accent-4)}
+.pill.amber{background:var(--accent-3);color:#1f1f24}
+
+/* TOC */
+.toc{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:24px;
+  border:2px solid var(--ink);
+}
+.toc a{
+  padding:18px;border-right:1px solid var(--rule);background:var(--paper-2);
+  text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px;
+  transition:background .2s;
+}
+.toc a:last-child{border-right:none}
+.toc a:hover{background:var(--ink);color:var(--paper)}
+.toc a:hover .nm{color:var(--paper)}
+.toc a:hover .lb{color:var(--accent-3)}
+.toc .lb{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:#666;text-transform:uppercase}
+.toc .nm{font-family:'Gowun Batang',serif;font-weight:700;font-size:15px;line-height:1.3;color:var(--ink)}
+
+@media (max-width:980px){
+  .toc{grid-template-columns:repeat(2,1fr)}
+  .timeline{grid-template-columns:1fr}
+  .group-grid{grid-template-columns:repeat(2,1fr)}
+  .strat-head,.strat-row{grid-template-columns:1fr}
+  .strat-head>div,.strat-row>div{border-right:none;border-bottom:1px solid var(--grid)}
+  .cause-grid,.lt-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="ribbon">
+  <span>경주여자고등학교 · 교과협의회 자료</span>
+  <span>FILE NO. 2026-03-MOCK-G1 · 표본 N=186</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- MASTHEAD                                                      -->
+<!-- ============================================================ -->
+<header class="masthead">
+  <div class="kicker">2026학년도 3월 전국연합학력평가 / 1학년 분석 보고서</div>
+  <h1>중하위 과밀, <span class="accent">수학·영어의 정체.</span><br>
+      허리를 들어올려야 학년이 움직인다.</h1>
+  <p class="sub">등급은 전국 응시생 기준의 <b>스테나인(Stanine) 9등급제</b>로 산출된다(명목 분포 4-7-12-17-20-17-12-7-4%). 학교 분포는 명목 4-5등급(37%) 대비 7~15%p 초과하는 <b>중위 응집 구조</b>를 보이며, 특히 수학은 명목 1-3등급(23%) 대비 -5.7%p 부족한 <b>상위 부재 구조</b>가 결합되어 있다. 본 보고서는 Stanine 기준 편차로 학년 구조를 진단하고 실행 중심 개입 전략을 제안한다.</p>
+  <div class="meta-row">
+    <span>실시일 / <b>2026.03.24</b></span>
+    <span>총 응시 / <b>186명</b></span>
+    <span>학급 수 / <b>9개 학급</b></span>
+    <span>분석 영역 / <b>국어·수학·영어·한국사·사회탐구·과학탐구</b></span>
+    <span>보고 주체 / <b>1학년 교과협의회</b></span>
+  </div>
+
+  <div class="toc">
+    <a href="#s1"><span class="lb">Section 01</span><span class="nm">전체 성적 구조 분석</span></a>
+    <a href="#s2"><span class="lb">Section 02</span><span class="nm">과목별 핵심 문제 진단</span></a>
+    <a href="#s3"><span class="lb">Section 03</span><span class="nm">학생 강·약점 그룹화</span></a>
+    <a href="#s4"><span class="lb">Section 04</span><span class="nm">원인 가설</span></a>
+    <a href="#s5"><span class="lb">Section 05</span><span class="nm">수업 개선 전략</span></a>
+    <a href="#s6"><span class="lb">Section 06</span><span class="nm">다층·과목별 개입 전략</span></a>
+    <a href="#s7"><span class="lb">Section 07</span><span class="nm">단기 실행 계획 (4주)</span></a>
+    <a href="#s8"><span class="lb">Section 08</span><span class="nm">중장기 개선 방향</span></a>
+  </div>
+</header>
+
+<!-- ============================================================ -->
+<!-- SECTION 1                                                     -->
+<!-- ============================================================ -->
+<section id="s1">
+  <div class="sec-head">
+    <span class="sec-num">01</span>
+    <h2 class="sec-title">전체 성적 구조 분석</h2>
+    <span class="sec-kicker">Macro View</span>
+  </div>
+
+  <!-- KPI row -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="label">전체 응시 인원</div>
+      <div class="value">186<span class="unit">명</span></div>
+      <div class="note">9개 학급 · 학급당 20~21명</div>
+    </div>
+    <div class="kpi">
+      <div class="label">학교 평균 표준점수 · 국어</div>
+      <div class="value">105.9</div>
+      <div class="delta good">전국 +5.9</div>
+      <div class="note">표준점수 기준 양호</div>
+    </div>
+    <div class="kpi">
+      <div class="label">학교 평균 표준점수 · 수학</div>
+      <div class="value">100.1</div>
+      <div class="delta amber" style="background:var(--accent-3);color:#1f1f24">전국 +0.1</div>
+      <div class="note">전국 평균 수준 정체</div>
+    </div>
+    <div class="kpi">
+      <div class="label">4-5등급 평균 누적</div>
+      <div class="value">49<span class="unit">%</span></div>
+      <div class="delta bad">중하위 과밀</div>
+      <div class="note">상대평가 4개 과목 평균</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="lbl">CORE FINDING · STANINE 기준</div>
+    <div class="txt">등급은 전국 상대평가 결과다. 명목 Stanine 분포(4-7-12-17-20-17-12-7-4%) 대비 학교 분포를 보면, <b style="color:var(--accent-3)">모든 과목에서 4-5등급이 +7~15%p 초과</b>하고 <b style="color:var(--accent-3)">6-9등급이 -14~18%p 부족</b>하다. 학교가 전국 중위층에 응집된 구조이며, <b style="color:var(--accent-3)">수학만 유일하게 상위 1-3등급도 -5.7%p 부족</b>하다.</div>
+  </div>
+
+  <!-- Stanine reference panel -->
+  <div class="stanine-panel" style="background:var(--ink);color:var(--paper);padding:32px;margin-top:32px;border:2px solid var(--ink);">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:8px;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;background:var(--accent);color:#fff;padding:4px 10px;">REFERENCE FRAMEWORK</span>
+      <h3 style="font-family:'Gowun Batang',serif;font-size:22px;font-weight:700;">스테나인(Stanine) 9등급제 명목 분포</h3>
+    </div>
+    <p style="font-size:13px;color:#bbb;margin-bottom:20px;max-width:780px;">학생 등급은 <b style="color:var(--accent-3)">전국 응시생 기준의 백분위 위치</b>로 결정된다(정규분포 변환). 따라서 비교 기준은 전국 분포가 아닌 명목 Stanine 비율이며, 명목 대비 편차로 학교의 구조적 위치를 진단한다.</p>
+    <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:2px;font-family:'JetBrains Mono',monospace;">
+      <!-- Grade headers -->
+      <div style="text-align:center;font-size:11px;letter-spacing:.1em;color:#888;padding:6px 0;border-bottom:1px solid #333;">1등급</div>
+      <div style="text-align:center;font-size:11px;letter-spacing:.1em;color:#888;padding:6px 0;border-bottom:1px solid #333;">2등급</div>
+      <div style="text-align:center;font-size:11px;letter-spacing:.1em;color:#888;padding:6px 0;border-bottom:1px solid #333;">3등급</div>
+      <div style="text-align:center;font-size:11px;letter-spacing:.1em;color:#888;padding:6px 0;border-bottom:1px solid #333;">4등급</div>
+      <div style="text-align:center;font-size:11px;letter-spacing:.1em;color:var(--accent-3);padding:6px 0;border-bottom:1px solid #333;">5등급 (평균)</div>
+      <div style="text-align:center;font-size:11px;letter-spacing:.1em;color:#888;padding:6px 0;border-bottom:1px solid #333;">6등급</div>
+      <div style="text-align:center;font-size:11px;letter-spacing:.1em;color:#888;padding:6px 0;border-bottom:1px solid #333;">7등급</div>
+      <div style="text-align:center;font-size:11px;letter-spacing:.1em;color:#888;padding:6px 0;border-bottom:1px solid #333;">8등급</div>
+      <div style="text-align:center;font-size:11px;letter-spacing:.1em;color:#888;padding:6px 0;border-bottom:1px solid #333;">9등급</div>
+      <!-- Percentages -->
+      <div style="text-align:center;font-size:28px;font-weight:700;padding:14px 0;color:var(--accent);">4%</div>
+      <div style="text-align:center;font-size:28px;font-weight:700;padding:14px 0;">7%</div>
+      <div style="text-align:center;font-size:28px;font-weight:700;padding:14px 0;">12%</div>
+      <div style="text-align:center;font-size:28px;font-weight:700;padding:14px 0;">17%</div>
+      <div style="text-align:center;font-size:28px;font-weight:700;padding:14px 0;color:var(--accent-3);">20%</div>
+      <div style="text-align:center;font-size:28px;font-weight:700;padding:14px 0;">17%</div>
+      <div style="text-align:center;font-size:28px;font-weight:700;padding:14px 0;">12%</div>
+      <div style="text-align:center;font-size:28px;font-weight:700;padding:14px 0;">7%</div>
+      <div style="text-align:center;font-size:28px;font-weight:700;padding:14px 0;color:var(--accent);">4%</div>
+      <!-- Cumulative bands -->
+      <div style="text-align:center;font-size:10px;letter-spacing:.05em;color:#888;padding:6px 0 0;">상위 4%</div>
+      <div style="text-align:center;font-size:10px;letter-spacing:.05em;color:#888;padding:6px 0 0;">~11%</div>
+      <div style="text-align:center;font-size:10px;letter-spacing:.05em;color:#888;padding:6px 0 0;">~23%</div>
+      <div style="text-align:center;font-size:10px;letter-spacing:.05em;color:#888;padding:6px 0 0;">~40%</div>
+      <div style="text-align:center;font-size:10px;letter-spacing:.05em;color:#888;padding:6px 0 0;">40~60%</div>
+      <div style="text-align:center;font-size:10px;letter-spacing:.05em;color:#888;padding:6px 0 0;">하위 40%</div>
+      <div style="text-align:center;font-size:10px;letter-spacing:.05em;color:#888;padding:6px 0 0;">~23%</div>
+      <div style="text-align:center;font-size:10px;letter-spacing:.05em;color:#888;padding:6px 0 0;">~11%</div>
+      <div style="text-align:center;font-size:10px;letter-spacing:.05em;color:#888;padding:6px 0 0;">하위 4%</div>
+    </div>
+    <p style="font-size:12px;color:#888;margin-top:18px;font-family:'JetBrains Mono',monospace;line-height:1.6;">
+      ※ Stanine = Standard Nine. 원점수 분포를 정규분포로 변환한 상대평가 체계.<br>
+      ※ 4-5등급 학생 1명을 3등급으로 이동 = <b style="color:var(--accent-3)">전국 상위 40% → 상위 23% 진입</b>을 의미함.
+    </p>
+  </div>
+
+  <div class="chart-grid" style="margin-top:32px">
+    <div class="chart-card">
+      <h3>과목별 등급 분포 (학교) · 명목 Stanine 비교</h3>
+      <div class="desc">// 누적 막대=학교 등급별 비율, 점선=명목 Stanine 분포(4-7-12-17-20-17-12-7-4%)</div>
+      <div class="chart-wrap tall"><canvas id="gradeStack"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>학교 등급분포 vs Stanine 명목 편차</h3>
+      <div class="desc">// 명목분포(4-7-12-17-20-17-12-7-4%) 대비 학교 비율의 차이 (%p)</div>
+      <div class="chart-wrap tall"><canvas id="extremes"></canvas></div>
+    </div>
+  </div>
+
+  <p style="font-size:13px;color:#666;margin-top:16px;font-family:'JetBrains Mono',monospace;line-height:1.7;">
+    ▶ <b style="color:var(--accent)">양(+)의 편차</b> = 명목보다 많은 학생 / <b style="color:var(--accent-4)">음(-)의 편차</b> = 명목보다 적은 학생<br>
+    ▶ 학교 분포가 명목보다 4-5등급(중위)에 +7~15%p 응집, 6-9등급(하위)에서 -14~18%p 부족 → "중위 응집" 구조 확정
+  </p>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 2                                                     -->
+<!-- ============================================================ -->
+<section id="s2">
+  <div class="sec-head">
+    <span class="sec-num">02</span>
+    <h2 class="sec-title">과목별 핵심 문제 진단</h2>
+    <span class="sec-kicker">Subject Risk Map</span>
+  </div>
+
+  <p style="font-size:13px;color:#666;margin-bottom:20px;font-family:'JetBrains Mono',monospace;letter-spacing:.05em">
+    // 명목 Stanine: 1-3등급 23% · 4-5등급 37% · 6-9등급 40% · 음수=명목보다 적음
+  </p>
+  <div class="diag-grid">
+    <div class="diag amber">
+      <div class="nm">국어</div>
+      <div class="row"><span>1-3등급</span><b>28.5% <span style="font-size:10px;opacity:.8">(+5.5)</span></b></div>
+      <div class="row"><span>4-5등급</span><b>45.7% <span style="font-size:10px;opacity:.8">(+8.7)</span></b></div>
+      <div class="row"><span>6-9등급</span><b>25.8% <span style="font-size:10px;opacity:.8">(-14.2)</span></b></div>
+      <div class="verdict">상위 양호, 중위 응집</div>
+    </div>
+    <div class="diag red">
+      <div class="nm">수학</div>
+      <div class="row"><span>1-3등급</span><b>17.3% <span style="font-size:10px;opacity:.8">(-5.7)</span></b></div>
+      <div class="row"><span>4-5등급</span><b>49.2% <span style="font-size:10px;opacity:.8">(+12.2)</span></b></div>
+      <div class="row"><span>6-9등급</span><b>33.5% <span style="font-size:10px;opacity:.8">(-6.5)</span></b></div>
+      <div class="verdict">상위 부재 + 중위 응집 (최위험)</div>
+    </div>
+    <div class="diag amber">
+      <div class="nm">영어</div>
+      <div class="row"><span>1-3등급</span><b>22.0% <span style="font-size:10px;opacity:.8">(-1.0)</span></b></div>
+      <div class="row"><span>4-5등급</span><b>52.2% <span style="font-size:10px;opacity:.8">(+15.2)</span></b></div>
+      <div class="row"><span>6-9등급</span><b>25.7% <span style="font-size:10px;opacity:.8">(-14.3)</span></b></div>
+      <div class="verdict">중위 응집 최대 (+15.2%p)</div>
+    </div>
+    <div class="diag green">
+      <div class="nm">한국사</div>
+      <div class="row"><span>1-3등급</span><b>54.8%</b></div>
+      <div class="row"><span>4-5등급</span><b>28.6%</b></div>
+      <div class="row"><span>6-9등급</span><b>16.2%</b></div>
+      <div class="verdict">절대평가 · 양호</div>
+    </div>
+    <div class="diag amber">
+      <div class="nm">사회탐구</div>
+      <div class="row"><span>1-3등급</span><b>28.5% <span style="font-size:10px;opacity:.8">(+5.5)</span></b></div>
+      <div class="row"><span>4-5등급</span><b>49.5% <span style="font-size:10px;opacity:.8">(+12.5)</span></b></div>
+      <div class="row"><span>6-9등급</span><b>22.0% <span style="font-size:10px;opacity:.8">(-18.0)</span></b></div>
+      <div class="verdict">상위 양호, 중위 응집</div>
+    </div>
+    <div class="diag amber">
+      <div class="nm">과학탐구</div>
+      <div class="row"><span>1-3등급</span><b>30.7% <span style="font-size:10px;opacity:.8">(+7.7)</span></b></div>
+      <div class="row"><span>4-5등급</span><b>44.1% <span style="font-size:10px;opacity:.8">(+7.1)</span></b></div>
+      <div class="row"><span>6-9등급</span><b>25.0% <span style="font-size:10px;opacity:.8">(-15.0)</span></b></div>
+      <div class="verdict">상위 양호, 중위 응집</div>
+    </div>
+  </div>
+
+  <div class="flourish">CLASS-LEVEL VARIANCE</div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>학급별 영역 평균 표준점수</h3>
+      <div class="desc">// 1-9반 국어·수학·사탐·과탐 평균 (학교평균선 표시)</div>
+      <div class="chart-wrap"><canvas id="classAvg"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>학급별 평균 영어 등급</h3>
+      <div class="desc">// 절대평가 영어, 값이 낮을수록 우수</div>
+      <div class="chart-wrap"><canvas id="classEng"></canvas></div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Gowun Batang',serif;font-size:22px;font-weight:700;margin-top:32px;margin-bottom:14px">학급별 종합 지표</h3>
+  <table class="cls-table">
+    <thead>
+      <tr>
+        <th>학급</th><th>인원</th>
+        <th>국어 평균</th><th>수학 평균</th><th>사탐 평균</th><th>과탐 평균</th>
+        <th>영어 평균등급</th><th>한국사 평균등급</th>
+      </tr>
+    </thead>
+    <tbody id="classTable"></tbody>
+  </table>
+  <p style="font-size:12px;color:#666;margin-top:10px;font-family:'JetBrains Mono',monospace">최우수·최취약 학급 강조 / 학교평균: 국어 105.9, 수학 100.1, 사탐 53.1, 과탐 52.5</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 3                                                     -->
+<!-- ============================================================ -->
+<section id="s3">
+  <div class="sec-head">
+    <span class="sec-num">03</span>
+    <h2 class="sec-title">학생 강·약점 그룹화</h2>
+    <span class="sec-kicker">Cohort Mapping</span>
+  </div>
+
+  <p style="font-size:14px;color:#444;max-width:780px;margin-bottom:8px">평균등급(국어·수학·영어·탐구 최우수 1과목)을 기준으로 학년을 4개 집단으로 분할. 동일 학생이 약점 과목 집단에 중복 포함될 수 있음.</p>
+
+  <div class="group-grid">
+    <div class="gcard top">
+      <span class="tag">A · 상위권</span>
+      <div class="num">21<span class="of">명 / 11.3%</span></div>
+      <div class="desc">평균등급 ≤ 2.5 · 정시 사정권<br>학년 핵심 자원, 심화 운영 대상</div>
+    </div>
+    <div class="gcard mu">
+      <span class="tag">B · 중상위권</span>
+      <div class="num">28<span class="of">명 / 15.1%</span></div>
+      <div class="desc">2.5 &lt; 평균등급 ≤ 3.5<br>등급 1단계 상승 여력 큼</div>
+    </div>
+    <div class="gcard ml">
+      <span class="tag">C · 중하위권</span>
+      <div class="num">84<span class="of">명 / 45.2%</span></div>
+      <div class="desc">3.5 &lt; 평균등급 ≤ 5.0<br><b>최대 표적 집단</b>, 수업 개선 효과 가장 큰 층</div>
+    </div>
+    <div class="gcard bot">
+      <span class="tag">D · 하위권</span>
+      <div class="num">53<span class="of">명 / 28.5%</span></div>
+      <div class="desc">평균등급 &gt; 5.0<br>기초학력 보강 필요</div>
+    </div>
+  </div>
+
+  <div class="chart-grid" style="margin-top:32px">
+    <div class="chart-card">
+      <h3>약점 과목별 집단 규모</h3>
+      <div class="desc">// 6등급 이하 학생 수 (탐구는 사·과탐 중 하나라도 6등급 이하)</div>
+      <div class="chart-wrap"><canvas id="weakGroup"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>학년 등급 평균 분포</h3>
+      <div class="desc">// 학생 1명당 평균등급의 도수분포</div>
+      <div class="chart-wrap"><canvas id="avgDist"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 4                                                     -->
+<!-- ============================================================ -->
+<section id="s4">
+  <div class="sec-head">
+    <span class="sec-num">04</span>
+    <h2 class="sec-title">원인 가설</h2>
+    <span class="sec-kicker">Structural Hypothesis</span>
+  </div>
+
+  <div class="cause-grid">
+    <div class="cause">
+      <h4>수업 측면</h4>
+      <ul>
+        <li>진도 중심 강의식 수업으로 중하위 학생의 개념 결손이 누적</li>
+        <li>학급 간 평균 표준점수 격차(수학 9.2점)는 학급별 수업 운영 편차를 시사</li>
+        <li>형성평가·정답률 진단 부족 → 결손 영역 파악 지연</li>
+        <li>핵심 개념 점검 루틴(도입 5분 등) 부재</li>
+      </ul>
+    </div>
+    <div class="cause">
+      <h4>학습 측면</h4>
+      <ul>
+        <li>중학 단계 결손(수학 연산, 영어 기본 어휘)이 누적된 채 진입</li>
+        <li>자기주도 학습 루틴 부재 → 약점 집단 47~62명 규모 형성</li>
+        <li>수능형 문항(독해·추론) 경험치 부족 → 4-5등급 정체</li>
+        <li>오답노트·단어장 등 누적 학습 도구 미정착</li>
+      </ul>
+    </div>
+    <div class="cause">
+      <h4>평가 대응 측면</h4>
+      <ul>
+        <li>첫 모의고사로 시험 시간 운용·OMR 전략 미숙</li>
+        <li>영역별 약점을 인지·기록하는 시스템 부재</li>
+        <li>EBS 연계·기출 활용 학습 경험 부족</li>
+        <li>등급 컷·표준점수 의미를 학생이 이해하지 못함</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 5                                                     -->
+<!-- ============================================================ -->
+<section id="s5">
+  <div class="sec-head">
+    <span class="sec-num">05</span>
+    <h2 class="sec-title">수업 개선 전략 · 정규수업</h2>
+    <span class="sec-kicker">Classroom Action Plan</span>
+  </div>
+
+  <div class="callout">
+    <div class="lbl">COMMON PROTOCOL</div>
+    <div class="txt">전 교과 공통 — <b style="color:var(--accent-3)">정규수업 첫 5분 전시학습 단답 점검</b> / <b style="color:var(--accent-3)">주 1회 형성평가 5+1문항</b> / <b style="color:var(--accent-3)">정답률 80% 미달 단원 자동 재투입</b></div>
+  </div>
+
+  <div class="strategy">
+    <div class="strat-head">
+      <div>과목</div><div>수업 도입</div><div>본 수업</div><div>마무리</div><div>주간 루틴</div>
+    </div>
+    <div class="strat-row">
+      <div class="label">국어<span class="sub">표적: 비문학 독해</span></div>
+      <div>EBS 연계 작품 핵심 개념 정리 <b>5분</b></div>
+      <div>비문학 지문 구조 분석(중심화제-정보유형-적용) 훈련</div>
+      <div>선지 적절성 판단 3문항 즉시 풀이</div>
+      <div><ul><li><b>주 2회</b> 지문 구조 분석 20분</li><li><b>주 1회</b> 짧은 지문(800자) 3개 + 선지 훈련</li></ul></div>
+    </div>
+    <div class="strat-row">
+      <div class="label">수학<span class="sub">표적: 함수·계산</span></div>
+      <div>전시 핵심 개념 단답 점검 <b>5분</b></div>
+      <div>함수 그래프 해석 5문항 루틴(개념-계산-적용)</div>
+      <div>개념 노트 작성 <b>10분</b> 의무화</div>
+      <div><ul><li><b>주 3회</b> 그래프 해석 루틴</li><li><b>주 1회</b> 중학 결손 단원 30분 보강</li></ul></div>
+    </div>
+    <div class="strat-row">
+      <div class="label">영어<span class="sub">표적: 어휘·대의파악</span></div>
+      <div>누적 어휘 30개 테스트 <b>5분</b></div>
+      <div>주장·요지·주제·제목 4지문 풀이 + 오답 구조 분석</div>
+      <div>핵심 구문 1개 한국어로 재진술</div>
+      <div><ul><li><b>주 2회</b> 대의파악 유형 집중 풀이</li><li><b>주 1회</b> 듣기 17문항 미니 모의고사</li></ul></div>
+    </div>
+    <div class="strat-row">
+      <div class="label">탐구<span class="sub">표적: 개념 도식화</span></div>
+      <div>단원 핵심 개념 마인드맵 도입 <b>5분</b></div>
+      <div>흐름도·개념도 학생 직접 작성 활동</div>
+      <div>자기설명(self-explanation) 1개 구두 발표 <b>5분</b></div>
+      <div><ul><li><b>주 1회</b> 단원평가 20문항</li><li>정답률 <b>70% 미만</b> 문항 즉시 재수업</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 6                                                     -->
+<!-- ============================================================ -->
+<section id="s6">
+  <div class="sec-head">
+    <span class="sec-num">06</span>
+    <h2 class="sec-title">다층·과목별 개입 전략</h2>
+    <span class="sec-kicker">Multi-Tier Intervention</span>
+  </div>
+
+  <h3 style="font-family:'Gowun Batang',serif;font-size:24px;font-weight:700;margin-bottom:8px">[A] 수준별 4계층 개입</h3>
+  <p style="font-size:13px;color:#666;margin-bottom:18px">각 계층별로 <b>수업·보충·코칭·온라인</b> 4영역 분리 운영</p>
+
+  <div class="strategy">
+    <div class="strat-head">
+      <div>계층</div><div>수업</div><div>보충/심화</div><div>학습 코칭</div><div>온라인 활용</div>
+    </div>
+    <div class="strat-row">
+      <div class="label">상위권<span class="sub">21명 / ≤2.5등급</span></div>
+      <div>정규수업 마지막 <b>10분</b> 고난도 추가 문항 (수학 4점 변별, 국어 추론)</div>
+      <div><b>주 2회</b> 90분 심화반, 6/9/수능 변별 문항 풀이</div>
+      <div><b>주 1회</b> 학습계획 점검 면담, 과목별 약점 1개 정밀 보완</div>
+      <div>EBSi 수능특강 빈칸·고난도 강의 <b>주 3회 30분</b> + 풀이노트</div>
+    </div>
+    <div class="strat-row">
+      <div class="label">중상위권<span class="sub">28명 / 2.5~3.5</span></div>
+      <div><b>주 1회</b> 풀이과정 서술형 과제(수학·과학)로 사고 명료화</div>
+      <div><b>주 1회</b> 방과후 60분 모의고사 4-5점 문항 집중 풀이</div>
+      <div>격주 면담, 오답노트 표준 양식 점검</div>
+      <div>EBSi 수능개념 <b>1.5배속</b> 주 3회 40분 + 매일 단어 30개</div>
+    </div>
+    <div class="strat-row">
+      <div class="label">중하위권<span class="sub">84명 / 3.5~5.0 · 최대 표적</span></div>
+      <div>또래 멘토링(상1:중2) <b>주 2회 15분</b>, 수업 마지막 시간</div>
+      <div><b>주 2회</b> 방과후 수준별 보충(수학 개념반/영어 어휘반 분리)</div>
+      <div>매일 15분 단위 학습 체크리스트, 담임 <b>주 1회</b> 확인</div>
+      <div>EBSi 수능개념 기초 <b>주 4회 25분</b> + 마더텅 단원별 5문항</div>
+    </div>
+    <div class="strat-row">
+      <div class="label">하위권<span class="sub">53명 / &gt;5.0</span></div>
+      <div>좌석 배치 조정 + 수업 중 1:1 점검, 핵심 개념 재진술 의무화</div>
+      <div><b>주 3회</b> 기초학력 향상반(수학 연산·영어 기본어휘)</div>
+      <div>매일 20분 자기주도 루틴(수학 5문제 + 영단어 20개), 담임 <b>매일 1분</b> 확인</div>
+      <div>EBSi 중학 핵심개념 복습 <b>주 3회 20분</b> + 메가스터디 BASIC 무료 강의</div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Gowun Batang',serif;font-size:24px;font-weight:700;margin-top:48px;margin-bottom:8px">[B] 약점 과목별 4영역 전략</h3>
+  <p style="font-size:13px;color:#666;margin-bottom:18px">6등급 이하 집단 대상, 한 학생이 여러 집단에 중복 포함 가능</p>
+
+  <div class="strategy">
+    <div class="strat-head">
+      <div>약점 집단</div><div>수업 전략</div><div>보충/기초 전략</div><div>학습 코칭</div><div>온라인 활용</div>
+    </div>
+    <div class="strat-row">
+      <div class="label">국어 약점<span class="sub">48명 (25.8%)</span></div>
+      <div>매시간 도입 <b>5분</b> 핵심 문제유형 분석 (문학/비문학 교차)</div>
+      <div><b>주 2회</b> 비문학 독해 워크숍 90분 (지문 1개 × 60분 정독)</div>
+      <div>매일 <b>20분</b> EBS 수능특강 지문 1개 정독 + 선지 적절성 표시</div>
+      <div>EBSi <b>'개념의 나비효과'</b> <b>주 3회 30분</b> 시청</div>
+    </div>
+    <div class="strat-row">
+      <div class="label">수학 약점<span class="sub">62명 (33.3%) · 최대</span></div>
+      <div><b>주 3회</b> 함수 그래프 해석 5문항 루틴 + 풀이과정 칠판 설명</div>
+      <div><b>주 3회</b> 개념기초반 60분 (중학 인수분해→고1 다항식 연계)</div>
+      <div>매일 개념 복습 15분 + <b>오답 3문제</b> 재풀이</div>
+      <div>EBSi 수능개념 <b>주 4회 30분</b> + 메가스터디 마더텅 5문제</div>
+    </div>
+    <div class="strat-row">
+      <div class="label">영어 약점<span class="sub">47명 (25.3%)</span></div>
+      <div>매시간 어휘 <b>30개</b> 테스트 + <b>주 2회</b> 대의파악 4지문</div>
+      <div><b>주 2회</b> 기초문법반 60분 (5형식→분사구문 단계학습)</div>
+      <div>매일 영단어 30개 + <b>주 1회</b> 듣기 17문항 자가채점</div>
+      <div>EBSi 듣기강의 <b>주 3회 25분</b> + 빈칸추론 강의 <b>주 2회</b></div>
+    </div>
+    <div class="strat-row">
+      <div class="label">탐구 약점<span class="sub">61명 (32.8%)</span></div>
+      <div><b>주 1회</b> 단원 도식화(흐름도·마인드맵) 학생 직접 작성</div>
+      <div><b>주 2회</b> 단원평가반 60분 (틀린 단원 우선 재수업)</div>
+      <div>단원 종료 시 <b>자기설명 노트 1쪽</b> 작성</div>
+      <div>EBSi 단원별 강의 <b>주 3회 25분</b> + 마더텅 단원별 5문항</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 7                                                     -->
+<!-- ============================================================ -->
+<section id="s7">
+  <div class="sec-head">
+    <span class="sec-num">07</span>
+    <h2 class="sec-title">단기 실행 계획 (4주)</h2>
+    <span class="sec-kicker">4-Week Sprint</span>
+  </div>
+
+  <div class="timeline">
+    <div class="week">
+      <span class="wk">WEEK 01</span>
+      <h4>진단 · 체계 구축</h4>
+      <ul>
+        <li>학생별 약점 영역 매핑 (전 교과 등급 카드 작성)</li>
+        <li>학급별 멘토-멘티 매칭 (상위 21명 + 중하위 84명)</li>
+        <li>오답노트 통일 양식 배포 및 작성법 1교시 교육</li>
+        <li>EBSi 학급 단위 계정 정비</li>
+      </ul>
+    </div>
+    <div class="week">
+      <span class="wk">WEEK 02</span>
+      <h4>루틴 정착</h4>
+      <ul>
+        <li>정규수업 첫 5분 전시학습 점검 전 교과 적용</li>
+        <li>방과후 보충수업 시간표 확정 (월·수·금 수학 / 화·목 영어·탐구)</li>
+        <li>형성평가 도구(과목별 5+1문항) 표준화·1차 실시</li>
+        <li>국어 약점 집단 비문학 워크숍 개시</li>
+      </ul>
+    </div>
+    <div class="week">
+      <span class="wk">WEEK 03</span>
+      <h4>약점 집중 보완</h4>
+      <ul>
+        <li>약점 집단별(국·수·영·탐) 그룹 보충 본격 가동</li>
+        <li>학습 코칭 면담 1차 라운드 완료 (담임 + 교과 협업)</li>
+        <li>EBSi 강의 시청 로그 점검 도입</li>
+        <li>중하위 84명 또래 멘토링 첫 시범 운영</li>
+      </ul>
+    </div>
+    <div class="week">
+      <span class="wk">WEEK 04</span>
+      <h4>점검 · 조정</h4>
+      <ul>
+        <li>4주차 형성평가 종합 분석 → 정답률 70% 미달 단원 재투입</li>
+        <li>학급별 등급 변화 추이 교과협의회 보고</li>
+        <li>4월 모의고사 대비 OMR·시간운용 모의훈련</li>
+        <li>5주차 방향 조정안 의결</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 8                                                     -->
+<!-- ============================================================ -->
+<section id="s8">
+  <div class="sec-head">
+    <span class="sec-num">08</span>
+    <h2 class="sec-title">중장기 개선 방향</h2>
+    <span class="sec-kicker">Mid-to-Long Term</span>
+  </div>
+
+  <div class="lt-grid">
+    <div class="lt">
+      <div class="horizon">Horizon I · 1학기 (6월 모의)</div>
+      <h4>구조 회복</h4>
+      <ul>
+        <li>수학 1-2등급 <b>8.1% → 12%</b> 회복</li>
+        <li>중하위 4-5등급 누적 <b>49% → 42%</b> 감축</li>
+        <li>영어 4-5등급 <b>52% → 45%</b> 감축</li>
+        <li>3등급 이상 진입 <b>5명+</b> 추가 확보</li>
+        <li>모든 과목 7-9등급 <b>10% 미만</b> 유지</li>
+      </ul>
+    </div>
+    <div class="lt">
+      <div class="horizon">Horizon II · 2학기 (9월 모의)</div>
+      <h4>편차 축소</h4>
+      <ul>
+        <li>학급 간 평균 표준점수 격차 <b>9점 → 5점 이내</b></li>
+        <li>약점 집단 <b>50%+ </b>가 상위 등급으로 이동</li>
+        <li>교과별 정답률 데이터 기반 수업 정착</li>
+        <li>교과협의회 <b>격주 운영</b> 정례화</li>
+      </ul>
+    </div>
+    <div class="lt">
+      <div class="horizon">Horizon III · 제도 정착</div>
+      <h4>시스템 내재화</h4>
+      <ul>
+        <li>학년 단위 학력 진단 <b>월 1회</b> 짧은 진단평가</li>
+        <li>교과 간 협업 보충 (국·영 독해 / 수·과 개념 연계)</li>
+        <li>학습 코칭 교사제 (담임당 <b>5명 정밀 관리</b>)</li>
+        <li>EBSi·기출 학습 로그 누적 분석 체계</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:36px">
+    <div class="lbl">CLOSING NOTE · STANINE 구조 인식</div>
+    <div class="txt">등급은 <b style="color:var(--accent-3)">전국 응시생 기준 백분위 위치</b>의 결과다. 학교 분포가 명목 Stanine 대비 <b style="color:var(--accent-3)">4-5등급에 +7~15%p 응집되어 있다는 사실은</b>, 이 84명의 중하위권 학생들이 <b style="color:var(--accent-3)">전국 상위 23%(3등급)로 진입 가능한 잠재력을 가진 표적 집단</b>임을 의미한다. 학생 개인의 능력 평가가 아닌 학년 시스템 운영의 문제로 해석할 것. 모든 전략은 행동 단위(주 X회, X분)로 제시되었으며, 4주 단위 점검을 통해 지속적으로 조정해야 한다.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="ln">2026학년도 3월 전국연합학력평가 · 1학년 분석 보고서</div>
+  <div class="ln">경주여자고등학교 · 교과협의회 자료</div>
+  <div class="ln"><b>Data N=186 · 9 Classes · 6 Subjects · Generated for 교과협의회</b></div>
+</footer>
+
+<script>
+// =====================================================
+// DATA
+// =====================================================
+const subjects = ['국어','수학','영어','한국사','사회탐구','과학탐구'];
+const schoolDist = {
+  '국어':    [4.30,9.68,14.52,24.19,21.51,14.52,8.60,2.69,0.00],
+  '수학':    [1.08,7.03,9.19,23.24,25.95,16.22,10.81,5.41,1.08],
+  '영어':    [2.15,6.99,12.90,25.27,26.88,16.13,5.38,3.76,0.54],
+  '한국사':   [20.43,18.82,15.59,13.98,14.52,9.14,4.84,2.69,0.00],
+  '사회탐구': [5.91,7.53,15.05,26.88,22.58,13.44,6.45,1.61,0.54],
+  '과학탐구': [3.23,11.29,16.13,26.34,17.74,15.05,6.99,2.69,0.54],
+};
+const natDist = {
+  '국어':    [4.15,7.15,13.00,16.63,20.27,16.59,11.71,6.77,3.71],
+  '수학':    [4.08,8.17,10.83,18.33,19.58,16.03,13.62,6.05,3.30],
+  '영어':    [4.38,8.45,13.56,18.13,20.63,15.77,10.04,6.61,2.44],
+  '한국사':   [16.33,10.68,12.46,13.65,13.95,13.51,12.09,6.28,1.05],
+  '사회탐구': [4.51,6.55,15.74,17.72,16.97,16.43,11.64,6.50,3.94],
+  '과학탐구': [4.64,7.54,12.53,19.33,16.73,16.60,13.52,5.83,3.26],
+};
+
+const classData = [
+  {n:1, kor:107.1, math:97.5,  soc:53.3, sci:53.4, eng:4.48},
+  {n:2, kor:107.5, math:103.5, soc:55.0, sci:51.2, eng:4.52},
+  {n:3, kor:105.0, math:98.8,  soc:54.1, sci:54.0, eng:4.90},
+  {n:4, kor:105.7, math:95.5,  soc:53.2, sci:50.3, eng:4.71},
+  {n:5, kor:100.1, math:100.8, soc:52.2, sci:52.8, eng:4.52},
+  {n:6, kor:104.7, math:96.9,  soc:52.3, sci:51.8, eng:4.60},
+  {n:7, kor:108.1, math:104.7, soc:52.9, sci:54.7, eng:4.05},
+  {n:8, kor:106.7, math:103.8, soc:51.7, sci:53.4, eng:4.55},
+  {n:9, kor:108.2, math:99.7,  soc:54.0, sci:52.0, eng:4.86},
+];
+
+const gradeAvgDist = {
+  '≤2.5': 21, '2.5–3.5': 28, '3.5–5.0': 84, '>5.0': 53
+};
+
+const weakGroup = {
+  '국어 약점': 48, '수학 약점': 62, '영어 약점': 47, '탐구 약점': 61
+};
+
+// =====================================================
+// CHART DEFAULTS
+// =====================================================
+Chart.defaults.font.family = "'IBM Plex Sans KR', sans-serif";
+Chart.defaults.color = '#1f1f24';
+Chart.defaults.borderColor = 'rgba(14,14,16,.1)';
+
+const PALETTE = {
+  g1:'#1d3557', g2:'#2d6a4f', g3:'#52b788', g4:'#74c69d',
+  g5:'#e9a23b', g6:'#f4a261', g7:'#e07856', g8:'#c5392c', g9:'#7a1f17'
+};
+
+// =====================================================
+// CHART 1: Grade Stack
+// =====================================================
+const subj5 = ['국어','수학','영어','사회탐구','과학탐구'];
+const gradeColors = ['#2d6a4f','#52b788','#74c69d','#e9a23b','#f4a261','#e07856','#c5392c','#7a1f17','#3d0f0b'];
+const gradeStackDatasets = [];
+for(let g=0; g<9; g++){
+  gradeStackDatasets.push({
+    label: `${g+1}등급`,
+    data: subj5.map(s => schoolDist[s][g]),
+    backgroundColor: gradeColors[g],
+    borderColor:'#1f1f24', borderWidth:.5,
+  });
+}
+new Chart(document.getElementById('gradeStack'), {
+  type:'bar',
+  data:{labels:subj5, datasets:gradeStackDatasets},
+  options:{
+    indexAxis:'y',
+    responsive:true, maintainAspectRatio:false,
+    scales:{
+      x:{stacked:true,max:100,ticks:{callback:v=>v+'%',font:{family:"'JetBrains Mono'"}},grid:{color:'rgba(0,0,0,.05)'}},
+      y:{stacked:true,grid:{display:false},ticks:{font:{family:"'Gowun Batang'",size:14,weight:'700'}}}
+    },
+    plugins:{
+      legend:{position:'bottom',labels:{font:{size:11,family:"'JetBrains Mono'"},boxWidth:14,padding:10}},
+      tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.x}%`}}
+    }
+  }
+});
+
+// =====================================================
+// CHART 2: Stanine Deviation (school - nominal stanine)
+// =====================================================
+const stanineNominal = [4, 7, 12, 17, 20, 17, 12, 7, 4];
+
+function deviation(subj){
+  return schoolDist[subj].map((v,i) => +(v - stanineNominal[i]).toFixed(2));
+}
+
+const subjColors = {
+  '국어':'#1d3557',
+  '수학':'#c5392c',
+  '영어':'#e07856',
+  '사회탐구':'#2d6a4f',
+  '과학탐구':'#e9a23b'
+};
+
+const devDatasets = subj5.map(s => ({
+  label: s,
+  data: deviation(s),
+  backgroundColor: subjColors[s],
+  borderColor: '#1f1f24',
+  borderWidth: 1,
+}));
+
+new Chart(document.getElementById('extremes'), {
+  type:'bar',
+  data:{
+    labels:['1등급','2등급','3등급','4등급','5등급','6등급','7등급','8등급','9등급'],
+    datasets:devDatasets
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    scales:{
+      y:{
+        ticks:{
+          callback:v=>(v>0?'+':'')+v+'%p',
+          font:{family:"'JetBrains Mono'", size:10}
+        },
+        grid:{color:(c)=>c.tick.value===0?'#1f1f24':'rgba(0,0,0,.05)', lineWidth:(c)=>c.tick.value===0?2:1},
+        title:{display:true,text:'명목 Stanine 대비 편차 (%p)',font:{size:11,family:"'JetBrains Mono'"},color:'#666'}
+      },
+      x:{
+        grid:{display:false},
+        ticks:{font:{family:"'JetBrains Mono'",size:10}}
+      }
+    },
+    plugins:{
+      legend:{position:'bottom',labels:{font:{size:10,family:"'JetBrains Mono'"},boxWidth:12,padding:8}},
+      tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y>0?'+':''}${c.parsed.y}%p`}}
+    }
+  }
+});
+
+// =====================================================
+// CHART 3: Class average
+// =====================================================
+new Chart(document.getElementById('classAvg'), {
+  type:'line',
+  data:{
+    labels:classData.map(c=>c.n+'반'),
+    datasets:[
+      {label:'국어', data:classData.map(c=>c.kor), borderColor:'#1d3557', backgroundColor:'rgba(29,53,87,.1)', tension:.25, borderWidth:2.5, pointRadius:4, pointBackgroundColor:'#1d3557'},
+      {label:'수학', data:classData.map(c=>c.math), borderColor:'#c5392c', backgroundColor:'rgba(197,57,44,.1)', tension:.25, borderWidth:2.5, pointRadius:4, pointBackgroundColor:'#c5392c'},
+      {label:'사탐 (×2 보정)', data:classData.map(c=>c.soc*2), borderColor:'#2d6a4f', backgroundColor:'rgba(45,106,79,.05)', tension:.25, borderWidth:1.5, borderDash:[5,5], pointRadius:3, pointBackgroundColor:'#2d6a4f'},
+      {label:'과탐 (×2 보정)', data:classData.map(c=>c.sci*2), borderColor:'#e9a23b', backgroundColor:'rgba(233,162,59,.05)', tension:.25, borderWidth:1.5, borderDash:[5,5], pointRadius:3, pointBackgroundColor:'#e9a23b'},
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    scales:{
+      y:{beginAtZero:false, suggestedMin:90, suggestedMax:115, ticks:{font:{family:"'JetBrains Mono'"}}, grid:{color:'rgba(0,0,0,.05)'}},
+      x:{grid:{display:false},ticks:{font:{family:"'Gowun Batang'",size:13,weight:'700'}}}
+    },
+    plugins:{
+      legend:{position:'bottom',labels:{font:{size:11,family:"'JetBrains Mono'"},boxWidth:14,padding:10}},
+      annotation:{}
+    }
+  }
+});
+
+// =====================================================
+// CHART 4: Class English grades
+// =====================================================
+new Chart(document.getElementById('classEng'), {
+  type:'bar',
+  data:{
+    labels:classData.map(c=>c.n+'반'),
+    datasets:[{
+      label:'영어 평균등급',
+      data:classData.map(c=>c.eng),
+      backgroundColor:classData.map(c=>{
+        if(c.eng<4.3) return '#2d6a4f';
+        if(c.eng<4.7) return '#e9a23b';
+        return '#c5392c';
+      }),
+      borderColor:'#1f1f24', borderWidth:1.5
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false, indexAxis:'y',
+    scales:{
+      x:{beginAtZero:false, min:3.8, max:5.2, ticks:{font:{family:"'JetBrains Mono'"}},grid:{color:'rgba(0,0,0,.05)'}},
+      y:{grid:{display:false},ticks:{font:{family:"'Gowun Batang'",size:13,weight:'700'}}}
+    },
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:c=>`평균 ${c.parsed.x.toFixed(2)}등급`}}
+    }
+  }
+});
+
+// =====================================================
+// CHART 5: Weak groups
+// =====================================================
+new Chart(document.getElementById('weakGroup'), {
+  type:'bar',
+  data:{
+    labels:Object.keys(weakGroup),
+    datasets:[{
+      label:'명',
+      data:Object.values(weakGroup),
+      backgroundColor:['#1d3557','#c5392c','#2d6a4f','#e9a23b'],
+      borderColor:'#1f1f24', borderWidth:1.5
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    scales:{
+      y:{beginAtZero:true, max:70, ticks:{font:{family:"'JetBrains Mono'"}},grid:{color:'rgba(0,0,0,.05)'}},
+      x:{grid:{display:false},ticks:{font:{family:"'Gowun Batang'",size:13,weight:'700'}}}
+    },
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:c=>`${c.parsed.y}명 (${(c.parsed.y/186*100).toFixed(1)}%)`}},
+      datalabels:false
+    }
+  }
+});
+
+// =====================================================
+// CHART 6: avg distribution donut
+// =====================================================
+new Chart(document.getElementById('avgDist'), {
+  type:'doughnut',
+  data:{
+    labels:['A 상위권 (≤2.5)','B 중상위 (2.5~3.5)','C 중하위 (3.5~5.0)','D 하위권 (>5.0)'],
+    datasets:[{
+      data:[21,28,84,53],
+      backgroundColor:['#2d6a4f','#1d3557','#e9a23b','#c5392c'],
+      borderColor:'#f5f1e8', borderWidth:3
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false, cutout:'62%',
+    plugins:{
+      legend:{position:'right',labels:{font:{size:12,family:"'IBM Plex Sans KR'"},boxWidth:14,padding:12}},
+      tooltip:{callbacks:{label:c=>`${c.label}: ${c.parsed}명 (${(c.parsed/186*100).toFixed(1)}%)`}}
+    }
+  }
+});
+
+// =====================================================
+// CLASS TABLE
+// =====================================================
+const tbody = document.getElementById('classTable');
+const counts = [21,21,20,21,21,20,21,20,21];
+
+const korAll = classData.map(c=>c.kor);
+const mathAll = classData.map(c=>c.math);
+const socAll = classData.map(c=>c.soc);
+const sciAll = classData.map(c=>c.sci);
+const engAll = classData.map(c=>c.eng);
+
+function hl(val, arr, lower){
+  const max = Math.max(...arr), min = Math.min(...arr);
+  if(lower){ // smaller is better (eng grade)
+    if(val === min) return 'hl best-mark';
+    if(val === max) return 'hl worst-mark';
+  } else {
+    if(val === max) return 'hl best-mark';
+    if(val === min) return 'hl worst-mark';
+  }
+  return '';
+}
+
+classData.forEach((c,i)=>{
+  const isBest = c.n === 7;
+  const isWorst = c.n === 4;
+  const klass = isBest? 'best' : (isWorst? 'worst' : '');
+  tbody.innerHTML += `
+    <tr class="${klass}">
+      <td class="cn">${c.n}반</td>
+      <td class="num">${counts[i]}</td>
+      <td class="num ${hl(c.kor,korAll,false)}">${c.kor.toFixed(1)}</td>
+      <td class="num ${hl(c.math,mathAll,false)}">${c.math.toFixed(1)}</td>
+      <td class="num ${hl(c.soc,socAll,false)}">${c.soc.toFixed(1)}</td>
+      <td class="num ${hl(c.sci,sciAll,false)}">${c.sci.toFixed(1)}</td>
+      <td class="num ${hl(c.eng,engAll,true)}">${c.eng.toFixed(2)}</td>
+      <td class="num">—</td>
+    </tr>
+  `;
+});
+
+</script>
+
+</body>
+</html>

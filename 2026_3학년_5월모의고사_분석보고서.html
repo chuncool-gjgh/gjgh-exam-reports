@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 5월 학력평가 분석 보고서 · 경주여자고등학교 3학년</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --ink:#1c1a17; --ink-soft:#43403a;
+    --paper:#f4efe6; --paper-2:#ebe3d4;
+    --card:#fbf8f1; --line:#d8ceb8;
+    --clay:#a8442a; --clay-soft:#c96b4f;
+    --teal:#1f5d56; --gold:#b4862f;
+    --navy:#26354d;
+    --up:#1f5d56; --down:#a8442a; --flat:#8a8170;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Pretendard',sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;}
+  .serif{font-family:'Gowun Batang',serif;}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 28px;}
+  section{padding:64px 0;border-top:1px solid var(--line);}
+  section:first-of-type{border-top:none;}
+
+  /* hero */
+  header.hero{
+    background:
+      radial-gradient(900px 380px at 88% -10%, rgba(168,68,42,.16), transparent 60%),
+      radial-gradient(700px 320px at 6% 120%, rgba(31,93,86,.16), transparent 60%),
+      var(--ink);
+    color:var(--paper);padding:72px 0 60px;position:relative;overflow:hidden;
+  }
+  header.hero::before{content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(0deg,transparent,transparent 38px,rgba(255,255,255,.035) 38px,rgba(255,255,255,.035) 39px);
+    pointer-events:none;}
+  .kicker{font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--clay-soft);font-weight:700;margin-bottom:20px;}
+  header.hero h1{font-size:clamp(34px,5.4vw,60px);line-height:1.18;font-weight:700;letter-spacing:-.01em;}
+  header.hero h1 em{font-style:normal;color:var(--clay-soft);}
+  .hero-sub{margin-top:22px;max-width:660px;color:#cfc7b6;font-size:17px;}
+  .hero-sub b{color:#fff;}
+  .meta-row{margin-top:38px;display:flex;flex-wrap:wrap;gap:0;border:1px solid rgba(255,255,255,.18);border-radius:3px;overflow:hidden;}
+  .meta-row div{padding:14px 22px;border-right:1px solid rgba(255,255,255,.14);flex:1;min-width:140px;}
+  .meta-row div:last-child{border-right:none;}
+  .meta-row .m-label{font-size:11px;letter-spacing:.18em;color:#a89e88;text-transform:uppercase;}
+  .meta-row .m-val{font-size:21px;font-weight:700;margin-top:3px;}
+
+  /* section heads */
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:14px;}
+  .sec-num{font-family:'Gowun Batang',serif;font-size:15px;font-weight:700;color:var(--clay);border:1.5px solid var(--clay);
+    width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:50%;flex:none;}
+  .sec-head h2{font-size:clamp(24px,3.4vw,33px);font-weight:700;letter-spacing:-.01em;}
+  .sec-lead{color:var(--ink-soft);max-width:790px;margin:0 0 34px 60px;font-size:16px;}
+  @media(max-width:640px){.sec-lead{margin-left:0;}}
+
+  /* compare hero — 3월 vs 5월 */
+  .cmp-banner{
+    background:var(--card);border:1px solid var(--line);border-radius:6px;
+    padding:28px 30px;margin-top:36px;
+  }
+  .cmp-banner h3{font-family:'Gowun Batang',serif;font-size:22px;font-weight:700;margin-bottom:6px;}
+  .cmp-banner .cb-sub{color:var(--ink-soft);font-size:14px;margin-bottom:22px;}
+  .cmp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  @media(max-width:860px){.cmp-grid{grid-template-columns:repeat(2,1fr);}}
+  .cmp-card{
+    background:var(--paper-2);border-radius:4px;padding:18px 18px;border-left:4px solid var(--flat);
+    position:relative;
+  }
+  .cmp-card.bad{border-left-color:var(--down);}
+  .cmp-card.good{border-left-color:var(--up);}
+  .cmp-card.warn{border-left-color:var(--gold);}
+  .cmp-card .cc-label{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--ink-soft);text-transform:uppercase;}
+  .cmp-card .cc-from{font-size:12px;color:#8a8170;margin-top:8px;}
+  .cmp-card .cc-arrow{font-size:11px;color:#bba98a;margin:2px 0;}
+  .cmp-card .cc-val{font-family:'Gowun Batang',serif;font-size:30px;font-weight:700;line-height:1.05;margin-top:2px;}
+  .cmp-card .cc-val small{font-size:16px;font-weight:700;color:var(--ink-soft);}
+  .cmp-card .cc-delta{margin-top:8px;font-size:13px;font-weight:700;}
+  .cmp-card.bad .cc-delta{color:var(--down);}
+  .cmp-card.good .cc-delta{color:var(--up);}
+  .cmp-card.warn .cc-delta{color:var(--gold);}
+  .cmp-card.flat .cc-delta{color:var(--flat);}
+
+  /* KPI cards */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:22px 20px;position:relative;overflow:hidden;}
+  .kpi::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--teal);}
+  .kpi.warn::after{background:var(--gold);}
+  .kpi.bad::after{background:var(--clay);}
+  .kpi .k-num{font-family:'Gowun Batang',serif;font-size:38px;font-weight:700;line-height:1;}
+  .kpi .k-num small{font-size:18px;font-weight:700;}
+  .kpi .k-label{font-size:13px;color:var(--ink-soft);margin-top:9px;font-weight:600;}
+  .kpi .k-note{font-size:12px;color:#8a8170;margin-top:6px;}
+
+  /* cards */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:26px 26px;}
+  .chart-card{margin-top:26px;}
+  .chart-title{font-weight:700;font-size:16px;margin-bottom:4px;}
+  .chart-title .cnt{font-weight:400;color:#8a8170;font-size:13px;}
+  .chart-desc{font-size:13px;color:#8a8170;margin-bottom:16px;}
+  .chart-box{position:relative;height:340px;}
+  .chart-box.tall{height:400px;}
+  .chart-box.sm{height:282px;}
+  .cgrid2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:26px;}
+  .cgrid2 .chart-card{margin-top:0;}
+  @media(max-width:760px){.cgrid2{grid-template-columns:1fr;}}
+  .two-col{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:start;}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  @media(max-width:860px){.kpi-grid{grid-template-columns:repeat(2,1fr);}.two-col,.three-col{grid-template-columns:1fr;}}
+
+  /* mini-table */
+  .mini-table{width:100%;border-collapse:collapse;margin-top:4px;}
+  .mini-table caption{text-align:left;font-weight:700;font-size:14px;margin-bottom:9px;}
+  .mini-table th,.mini-table td{border:1px solid var(--line);padding:9px 14px;font-size:13.5px;}
+  .mini-table th{background:var(--paper-2);font-weight:700;letter-spacing:.03em;}
+  .mini-table td:first-child,.mini-table th:first-child{font-weight:700;}
+  .block-title{font-family:'Gowun Batang',serif;font-size:19px;font-weight:700;margin-top:34px;}
+  .block-desc{font-size:13px;color:#8a8170;margin-bottom:2px;margin-top:4px;}
+
+  /* subject diagnosis */
+  .subj{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:22px 24px;margin-top:16px;
+    display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:start;}
+  @media(max-width:640px){.subj{grid-template-columns:1fr;gap:10px;}}
+  .subj .s-name{font-family:'Gowun Batang',serif;font-size:23px;font-weight:700;}
+  .subj .s-tag{display:inline-block;margin-top:8px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;letter-spacing:.04em;}
+  .tag-good{background:rgba(31,93,86,.13);color:var(--teal);}
+  .tag-warn{background:rgba(180,134,47,.16);color:var(--gold);}
+  .tag-bad{background:rgba(168,68,42,.13);color:var(--clay);}
+  .subj ul{list-style:none;}
+  .subj li{padding-left:20px;position:relative;margin-bottom:7px;font-size:14.5px;}
+  .subj li::before{content:"";position:absolute;left:0;top:11px;width:7px;height:7px;background:var(--clay);border-radius:50%;}
+  .subj li b{color:var(--clay);}
+  .ar-note{margin-top:10px;background:var(--paper-2);border-radius:3px;padding:10px 14px;font-size:13px;color:var(--ink-soft);}
+  .ar-note b{color:var(--ink);}
+
+  /* group table */
+  .gtable{width:100%;border-collapse:collapse;margin-top:8px;background:var(--card);border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+  .gtable th,.gtable td{padding:14px 18px;text-align:left;border-bottom:1px solid var(--line);}
+  .gtable th{background:var(--paper-2);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+  .gtable tr:last-child td{border-bottom:none;}
+  .gtable .g-name{font-weight:700;font-family:'Gowun Batang',serif;font-size:17px;}
+  .gtable .g-size{font-weight:700;color:var(--clay);white-space:nowrap;}
+  .gtable .g-trend.up{color:var(--up);font-weight:700;}
+  .gtable .g-trend.down{color:var(--down);font-weight:700;}
+  .gtable td:last-child{font-size:14px;color:var(--ink-soft);}
+
+  /* cause */
+  .cause{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:24px;}
+  .cause h4{font-size:17px;font-weight:700;margin-bottom:4px;}
+  .cause .c-sub{font-size:12px;color:#8a8170;margin-bottom:14px;letter-spacing:.04em;}
+  .cause ul{list-style:none;}
+  .cause li{font-size:14px;padding-left:18px;position:relative;margin-bottom:11px;color:var(--ink-soft);}
+  .cause li::before{content:"→";position:absolute;left:0;color:var(--gold);font-weight:700;}
+  .cause li b{color:var(--ink);}
+
+  /* strategy cards */
+  .strat{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:0;overflow:hidden;margin-top:18px;}
+  .strat-head{padding:18px 24px;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:space-between;gap:14px;}
+  .strat-head .sh-name{font-family:'Gowun Batang',serif;font-size:21px;font-weight:700;}
+  .strat-head .sh-name span{color:var(--clay-soft);}
+  .strat-head .sh-size{font-size:12px;color:#cfc7b6;border:1px solid rgba(255,255,255,.25);padding:5px 11px;border-radius:999px;white-space:nowrap;}
+  .strat-body{display:grid;grid-template-columns:repeat(4,1fr);}
+  @media(max-width:860px){.strat-body{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:520px){.strat-body{grid-template-columns:1fr;}}
+  .strat-body .cell{padding:18px 20px;border-right:1px solid var(--line);border-top:1px solid var(--line);}
+  .strat-body .cell:nth-child(4n){border-right:none;}
+  .cell .c-cat{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--clay);margin-bottom:9px;}
+  .cell ul{list-style:none;}
+  .cell li{font-size:13.5px;margin-bottom:9px;padding-left:14px;position:relative;color:var(--ink-soft);}
+  .cell li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;background:var(--gold);border-radius:50%;}
+  .cell li b{color:var(--ink);background:rgba(180,134,47,.18);padding:0 3px;border-radius:2px;}
+
+  /* tier */
+  .tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  @media(max-width:860px){.tier-grid{grid-template-columns:1fr;}}
+  .tier{background:var(--card);border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+  .tier-top{padding:20px 22px;color:#fff;}
+  .tier.t-top .tier-top{background:var(--teal);}
+  .tier.t-mid .tier-top{background:var(--navy);}
+  .tier.t-low .tier-top{background:var(--clay);}
+  .tier-top .tt-name{font-family:'Gowun Batang',serif;font-size:22px;font-weight:700;}
+  .tier-top .tt-meta{font-size:13px;opacity:.85;margin-top:4px;}
+  .tier-body{padding:18px 22px;}
+  .tier-body .tb-block{margin-bottom:14px;}
+  .tier-body .tb-cat{font-size:11px;font-weight:700;letter-spacing:.09em;color:var(--clay);text-transform:uppercase;margin-bottom:4px;}
+  .tier-body .tb-text{font-size:13.5px;color:var(--ink-soft);}
+  .tier-body .tb-text b{color:var(--ink);background:rgba(180,134,47,.18);padding:0 3px;border-radius:2px;}
+
+  /* timeline */
+  .timeline{position:relative;margin-top:10px;padding-left:8px;}
+  .timeline::before{content:"";position:absolute;left:20px;top:10px;bottom:10px;width:2px;background:var(--line);}
+  .tl-item{position:relative;padding:0 0 26px 58px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-dot{position:absolute;left:8px;top:0;width:27px;height:27px;border-radius:50%;background:var(--clay);color:#fff;
+    font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;font-family:'Gowun Batang',serif;}
+  .tl-item h4{font-size:16px;font-weight:700;margin-bottom:5px;}
+  .tl-item p{font-size:14px;color:var(--ink-soft);}
+
+  /* long-term */
+  .lt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media(max-width:640px){.lt-grid{grid-template-columns:1fr;}}
+  .lt{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:4px;padding:20px 22px;}
+  .lt h4{font-size:16px;font-weight:700;margin-bottom:6px;}
+  .lt p{font-size:14px;color:var(--ink-soft);}
+
+  /* callout */
+  .callout{background:var(--ink);color:var(--paper);border-radius:4px;padding:28px 30px;margin-top:26px;display:flex;gap:22px;align-items:flex-start;}
+  .callout .co-mark{font-family:'Gowun Batang',serif;font-size:46px;color:var(--clay-soft);line-height:.8;flex:none;}
+  .callout p{font-size:16px;}
+  .callout p b{color:var(--clay-soft);}
+
+  footer{background:var(--ink);color:#a89e88;padding:34px 0;font-size:13px;}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+
+  /* nav */
+  nav.toc{position:sticky;top:0;z-index:50;background:rgba(244,239,230,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  nav.toc .wrap{display:flex;gap:4px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px;}
+  nav.toc a{font-size:12.5px;color:var(--ink-soft);text-decoration:none;padding:6px 11px;border-radius:3px;font-weight:600;white-space:nowrap;}
+  nav.toc a:hover{background:var(--paper-2);color:var(--clay);}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">교과협의회 분석자료 · 5월 학력평가 · 3월 대비 변화 중심</div>
+    <h1 class="serif">2026 5월 전국연합학력평가<br><em>성적 구조 변화 진단</em></h1>
+    <p class="hero-sub">3월 학평 결과 대비 <b>수학 구조 추가 악화</b>·<b>국어 5등급 적체 신규 발생</b>·<b>영어 시험 난도 하락에 따른 일시 호조</b>가 동시에 관측되었습니다. 학년 다층 구조는 중위권으로 수렴하고 있으며, 6월 모평을 1차 검증 시점으로 한 개입 전략이 필요합니다.</p>
+    <div class="meta-row">
+      <div><div class="m-label">대상</div><div class="m-val">3학년 186명</div></div>
+      <div><div class="m-label">실시일</div><div class="m-val">2026.05.07</div></div>
+      <div><div class="m-label">학교</div><div class="m-val">경주여자고</div></div>
+      <div><div class="m-label">비교 기준</div><div class="m-val">2026.03 학평</div></div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="wrap">
+    <a href="#s0">0 · 3월 vs 5월</a>
+    <a href="#s1">1 · 전체 구조</a>
+    <a href="#s2">2 · 과목 진단</a>
+    <a href="#s3">3 · 집단화</a>
+    <a href="#s4">4 · 원인 가설</a>
+    <a href="#s5">5 · 수업개선 전략</a>
+    <a href="#s6">6 · 다층 개입</a>
+    <a href="#s7">7 · 4주 계획</a>
+    <a href="#s8">8 · 중장기</a>
+  </div>
+</nav>
+
+<!-- ============ 0 · 3월 vs 5월 ============ -->
+<section id="s0">
+  <div class="wrap">
+    <div class="sec-head"><div class="sec-num">0</div><h2 class="serif">3월 학평 대비 핵심 변화</h2></div>
+    <p class="sec-lead">먼저 3월 학평과 5월 학평을 동일 분석틀로 비교합니다. 5월 학평은 단독 결과가 아니라 <b>3월 → 5월 변화의 추세</b>로 해석할 때 의미가 살아납니다.</p>
+
+    <div class="cmp-banner">
+      <h3 class="serif">9개 핵심 지표 — 3월 → 5월</h3>
+      <div class="cb-sub">색띠가 <span style="color:var(--down);font-weight:700;">붉으면 악화</span>, <span style="color:var(--up);font-weight:700;">녹색이면 개선</span>, 황색은 해석 주의</div>
+      <div class="cmp-grid">
+        <div class="cmp-card flat">
+          <div class="cc-label">국어 표준점수</div>
+          <div class="cc-from">3월 109.4</div>
+          <div class="cc-arrow">↓</div>
+          <div class="cc-val">109.9</div>
+          <div class="cc-delta">+0.5 · 거의 동일</div>
+        </div>
+        <div class="cmp-card bad">
+          <div class="cc-label">수학 표준점수</div>
+          <div class="cc-from">3월 103.4</div>
+          <div class="cc-arrow">↓</div>
+          <div class="cc-val">102.3</div>
+          <div class="cc-delta">−1.1 · 평균 하락</div>
+        </div>
+        <div class="cmp-card warn">
+          <div class="cc-label">영어 1~2등급</div>
+          <div class="cc-from">3월 16.6%</div>
+          <div class="cc-arrow">↓</div>
+          <div class="cc-val">29.6<small>%</small></div>
+          <div class="cc-delta">+13.0%p · 난도 하락 효과</div>
+        </div>
+        <div class="cmp-card bad">
+          <div class="cc-label">수학 1~2등급</div>
+          <div class="cc-from">3월 8.0%</div>
+          <div class="cc-arrow">↓</div>
+          <div class="cc-val">5.4<small>%</small></div>
+          <div class="cc-delta">−2.6%p · 상위권 추가 이탈</div>
+        </div>
+        <div class="cmp-card bad">
+          <div class="cc-label">수학 4~5등급</div>
+          <div class="cc-from">3월 56.1%</div>
+          <div class="cc-arrow">↓</div>
+          <div class="cc-val">61.3<small>%</small></div>
+          <div class="cc-delta">+5.1%p · 과밀 심화</div>
+        </div>
+        <div class="cmp-card bad">
+          <div class="cc-label">국어 5등급 단일</div>
+          <div class="cc-from">3월 17.7%</div>
+          <div class="cc-arrow">↓</div>
+          <div class="cc-val">25.8<small>%</small></div>
+          <div class="cc-delta">+8.2%p · 적체 신규 발생</div>
+        </div>
+        <div class="cmp-card good">
+          <div class="cc-label">다층 — 상위권</div>
+          <div class="cc-from">3월 5.3%</div>
+          <div class="cc-arrow">↓</div>
+          <div class="cc-val">5.9<small>%</small></div>
+          <div class="cc-delta">+0.6%p · 미세 개선</div>
+        </div>
+        <div class="cmp-card bad">
+          <div class="cc-label">다층 — 중위권</div>
+          <div class="cc-from">3월 60.4%</div>
+          <div class="cc-arrow">↓</div>
+          <div class="cc-val">64.0<small>%</small></div>
+          <div class="cc-delta">+3.6%p · 중위 수렴</div>
+        </div>
+        <div class="cmp-card good">
+          <div class="cc-label">다층 — 하위권</div>
+          <div class="cc-from">3월 34.2%</div>
+          <div class="cc-arrow">↓</div>
+          <div class="cc-val">30.1<small>%</small></div>
+          <div class="cc-delta">−4.1%p · 영어 효과 추정</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card chart-card">
+      <div class="chart-title">3월 → 5월 등급 분포 변화 (학교)</div>
+      <div class="chart-desc">국·수·영·한국사 각 등급 비율의 3월 대비 변화량 · 단위 %p</div>
+      <div class="chart-box tall"><canvas id="deltaChart"></canvas></div>
+    </div>
+
+    <div class="callout">
+      <div class="co-mark serif">!</div>
+      <p><b>핵심 메시지</b> — 영어 1~2등급 +13%p는 전국도 동시 상승(+9.6%p)했으므로 <b>학교의 실질 개선이 아닌 시험 난도 하락</b>입니다. 반면 수학·국어 악화는 학교 고유 추세이며 6월 모평에서 그대로 재현될 위험이 큽니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1 · 전체 구조 ============ -->
+<section id="s1">
+  <div class="wrap">
+    <div class="sec-head"><div class="sec-num">1</div><h2 class="serif">전체 성적 구조 분석 (5월 기준)</h2></div>
+    <p class="sec-lead">학년 다층 구조는 하위권이 줄고 중위권이 늘어나는 '중위 수렴' 양상입니다. 영어 영향으로 일부 하위권이 중위권으로 이동했으나, 수학·국어 중위층의 상위권 진입은 실패했습니다.</p>
+
+    <div class="kpi-grid">
+      <div class="kpi"><div class="k-num">5.9<small>%</small></div><div class="k-label">상위권 (1~2등급대)</div><div class="k-note">11명 · 상위권 정체</div></div>
+      <div class="kpi warn"><div class="k-num">64.0<small>%</small></div><div class="k-label">중위권 (3~4등급대)</div><div class="k-note">119명 · 중위 과밀 심화</div></div>
+      <div class="kpi bad"><div class="k-num">30.1<small>%</small></div><div class="k-label">하위권 (5등급 이하)</div><div class="k-note">56명 · 영어 영향 감소</div></div>
+      <div class="kpi bad"><div class="k-num">94.1<small>%</small></div><div class="k-label">중하위 누적 비중</div><div class="k-note">중위 + 하위 합계</div></div>
+    </div>
+
+    <div class="two-col" style="margin-top:26px;">
+      <div class="card">
+        <div class="chart-title">학년 다층 구조 분포 (5월)</div>
+        <div class="chart-desc">국·수·영 평균등급 기준 · 응시 186명</div>
+        <div class="chart-box"><canvas id="tierDonut"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="chart-title">영역별 표준점수 평균 — 학교 vs 전국</div>
+        <div class="chart-desc">전국 기준점 — 국어·수학 100 / 탐구 50</div>
+        <div class="chart-box"><canvas id="stdBar"></canvas></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 · 과목별 ============ -->
+<section id="s2">
+  <div class="wrap">
+    <div class="sec-head"><div class="sec-num">2</div><h2 class="serif">과목별 핵심 문제 진단</h2></div>
+    <p class="sec-lead">3월 대비 변화 + 답지반응률(정답률) 분석을 결합해 각 과목의 구조적 약점을 진단합니다. 답지반응률은 어느 문항 유형에서 학교 학생들이 무너지고 있는지를 보여줍니다.</p>
+
+    <div class="block-title" style="margin-top:8px;">국어·수학·영어·한국사 등급 분포</div>
+    <div class="block-desc">과목별로 학교 분포(진한 막대)와 전국 분포(연한 막대)를 분리 비교 · 단위 % · 가로축은 등급</div>
+    <div class="cgrid2">
+      <div class="card chart-card">
+        <div class="chart-title">국어 <span class="cnt">· 응시 186명</span></div>
+        <div class="chart-desc">5등급 적체 신규 발생, 전국(20.9%) 추월</div>
+        <div class="chart-box sm"><canvas id="gd_kor"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">수학 <span class="cnt">· 응시 186명</span></div>
+        <div class="chart-desc">4~5등급 61.3% — 전국 대비 격차 +24.1%p</div>
+        <div class="chart-box sm"><canvas id="gd_mat"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">영어 <span class="cnt">· 응시 186명</span></div>
+        <div class="chart-desc">1~2등급 29.6% — 전국도 동시 상승(난도 하락)</div>
+        <div class="chart-box sm"><canvas id="gd_eng"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">한국사 <span class="cnt">· 응시 186명</span></div>
+        <div class="chart-desc">양극화 완화, 4등급이 학년 최대 구간</div>
+        <div class="chart-box sm"><canvas id="gd_his"></canvas></div>
+      </div>
+    </div>
+
+    <!-- 과목별 텍스트 진단 -->
+    <div class="subj">
+      <div><div class="s-name">국어</div><div class="s-tag tag-bad">5등급 적체 신규 발생</div></div>
+      <ul>
+        <li>5등급 17.7% → <b>25.8% (+8.2%p)</b>, 전국(20.9%) 추월 — 학교의 기존 강점이었던 영역에서 후퇴</li>
+        <li>1~2등급 16.1% 유지, 4~5등급 누적 50.0%(+5.1%p)</li>
+        <li>약점 집단 규모 69명 → <b>85명(+16명)</b> — 4개 영역 중 가장 큰 악화</li>
+        <div class="ar-note">
+          <b>답지반응률 인사이트</b> — 화법과 작문은 학교가 전국 대비 평균 +10~20%p 우세하나, 비문학 변별 문항(35·36·39번 등)에서 학교 정답률이 50%대로 정체. <b>중하위층의 후반부 시간 관리·지문 구조 분석 실패</b>가 5등급 증가의 핵심 원인으로 추정.
+        </div>
+      </ul>
+    </div>
+
+    <div class="subj">
+      <div><div class="s-name">수학</div><div class="s-tag tag-bad">최우선 위험 · 추가 악화</div></div>
+      <ul>
+        <li>1~2등급 8.0% → <b>5.4%(−2.6%p)</b>, 전국(12.4%)과 격차 −7.0%p로 확대</li>
+        <li>4~5등급 누적 56.1% → <b>61.3%(+5.1%p)</b>, 전국(37.2%)과 격차 <b>+24.1%p</b></li>
+        <li>수학이 국·영보다 2등급↑ 낮은 학생 70명 → <b>90명(48.4%)</b>, 학년 절반에 육박</li>
+        <div class="ar-note">
+          <b>답지반응률 인사이트 (확률과 통계, 다수 선택)</b> — 14번까지는 학교가 전국과 비슷하거나 우세하나, <b>15번 이후 정답률이 모두 D·E등급</b>(20~40% 또는 그 미만). 단답형 21~22번 정답률 극히 저조. 후반부 변별 문항 진입에 학년 차원에서 실패하고 있음.
+        </div>
+      </ul>
+    </div>
+
+    <div class="subj">
+      <div><div class="s-name">영어</div><div class="s-tag tag-warn">난도 하락 효과 · 6월 위험</div></div>
+      <ul>
+        <li>1~2등급 16.6% → <b>29.6%(+13.0%p)</b>, 그러나 <b>전국도 13.5% → 23.1%(+9.6%p)</b> 동시 상승</li>
+        <li>학교 우위 폭 +3.0%p → +6.5%p로 확대된 것은 진짜 개선, 그러나 절대평가 등급 자체는 시험 난도가 좌우</li>
+        <li>약점 집단 54명 → <b>36명(−18명)</b>, 권역별 영어 최약점 학생 큰 폭 감소</li>
+        <div class="ar-note">
+          <b>답지반응률 인사이트</b> — 학교가 전국 대비 전반 우세. 다만 <b>30번대 빈칸·간접쓰기 변별 문항(34·37·39·40번)은 정답률 D등급(20~40%)</b>. 6월/9월 모평·수능에서 난도 복귀 시 점수 하락 위험 큼.
+        </div>
+      </ul>
+    </div>
+
+    <div class="subj">
+      <div><div class="s-name">한국사</div><div class="s-tag tag-warn">양극화 완화 · 4등급 집중</div></div>
+      <ul>
+        <li>4등급 16.0% → <b>26.9%(+10.9%p)</b>, 6~7등급 28.9% → 18.8%(−10.1%p)</li>
+        <li>1~2등급 19.9% 유지, 양극화는 완화되었으나 4등급 컷 인근이 학년 최대 구간으로 이동</li>
+        <li>절대평가 등급 컷 인근 학생 집중 관리로 5등급 이상 안착 가능</li>
+      </ul>
+    </div>
+
+    <!-- 탐구 -->
+    <div class="block-title">탐구 선택과목별 등급 분포</div>
+    <div class="block-desc">선택자 5명 이하는 표, 6명 이상은 개별 그래프 · 단위 % · 가로축은 등급</div>
+
+    <div class="card" style="margin-top:14px;">
+      <table class="mini-table">
+        <caption>선택자 5명 이하 과목 — 표본 작아 그래프 생략</caption>
+        <thead><tr><th>과목</th><th>선택 인원</th><th>등급별 인원 분포</th></tr></thead>
+        <tbody>
+          <tr><td>물리학Ⅰ</td><td>4명</td><td>3·4·5·6등급 각 1명</td></tr>
+          <tr><td>동아시아사</td><td>3명</td><td>3등급 2명 · 5등급 1명</td></tr>
+          <tr><td>물리학Ⅱ</td><td>1명</td><td>3등급 1명</td></tr>
+          <tr><td>지구과학Ⅱ</td><td>2명</td><td>8등급 1명 · 9등급 1명</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cgrid2">
+      <div class="card chart-card">
+        <div class="chart-title">사회·문화 <span class="cnt">· 95명</span></div>
+        <div class="chart-desc">학교 vs 전국 · 안정적 상위권 형성</div>
+        <div class="chart-box sm"><canvas id="td_sm"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">생활과 윤리 <span class="cnt">· 72명</span></div>
+        <div class="chart-desc">학교 vs 전국 · 1~3등급 학교 우세</div>
+        <div class="chart-box sm"><canvas id="td_le"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">생명과학Ⅰ <span class="cnt">· 47명</span></div>
+        <div class="chart-desc">학교 vs 전국 · 1등급 0명, 3·5등급 각 31.9%</div>
+        <div class="chart-box sm"><canvas id="td_bio"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">지구과학Ⅰ <span class="cnt">· 43명</span></div>
+        <div class="chart-desc">학교 vs 전국 · 4~5등급 53.5% 집중</div>
+        <div class="chart-box sm"><canvas id="td_es"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">한국지리 <span class="cnt">· 36명</span></div>
+        <div class="chart-desc">학교 vs 전국 · 1~2등급 50.0% 매우 우수</div>
+        <div class="chart-box sm"><canvas id="td_kg"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">세계지리 <span class="cnt">· 25명</span></div>
+        <div class="chart-desc">학교 vs 전국 · 3·4등급 집중</div>
+        <div class="chart-box sm"><canvas id="td_wg"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">윤리와 사상 <span class="cnt">· 21명</span></div>
+        <div class="chart-desc">학교 vs 전국 · 1·2등급 학교 우세, 4등급 집중</div>
+        <div class="chart-box sm"><canvas id="td_ep"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">정치와 법 <span class="cnt">· 10명</span></div>
+        <div class="chart-desc">학교 vs 전국 · 1등급 30% 우수</div>
+        <div class="chart-box sm"><canvas id="td_pl"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">화학Ⅰ <span class="cnt">· 7명</span></div>
+        <div class="chart-desc">학교 vs 전국 · 표본 작음, 해석 주의</div>
+        <div class="chart-box sm"><canvas id="td_ch"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">세계사 <span class="cnt">· 6명</span></div>
+        <div class="chart-desc">학교 vs 전국 · 표본 작음, 해석 주의</div>
+        <div class="chart-box sm"><canvas id="td_ws"></canvas></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 · 집단화 ============ -->
+<section id="s3">
+  <div class="wrap">
+    <div class="sec-head"><div class="sec-num">3</div><h2 class="serif">학생 강점·약점 과목별 그룹화</h2></div>
+    <p class="sec-lead">학생별 최약점 영역 기준으로 4개 집단을 도출했습니다. 3월 대비 <b>국어 약점 집단이 16명 증가</b>한 것이 가장 큰 변화입니다.</p>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="chart-title">약점 집단 규모 — 3월 vs 5월</div>
+        <div class="chart-desc">해당 영역이 5등급 이하 또는 본인 평균보다 1등급↑ 낮은 학생 수</div>
+        <div class="chart-box"><canvas id="weakCompare"></canvas></div>
+      </div>
+      <div>
+        <table class="gtable">
+          <thead><tr><th>약점 집단</th><th>5월 규모</th><th>변화</th></tr></thead>
+          <tbody>
+            <tr><td class="g-name">수학</td><td class="g-size">117명<br>(62.9%)</td><td><span class="g-trend down">+6</span><br>학년 다수, 핵심 과제 지속</td></tr>
+            <tr><td class="g-name">국어</td><td class="g-size">85명<br>(45.7%)</td><td><span class="g-trend down">+16</span><br>가장 큰 악화, 5등급 적체</td></tr>
+            <tr><td class="g-name">탐구</td><td class="g-size">58명<br>(31.2%)</td><td><span class="g-trend">±0</span><br>생명·지구과학 정체 지속</td></tr>
+            <tr><td class="g-name">영어</td><td class="g-size">36명<br>(19.4%)</td><td><span class="g-trend up">−18</span><br>난도 하락 효과로 일시 감소</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card chart-card">
+      <div class="chart-title">권역별 최약점 패턴 (5월)</div>
+      <div class="chart-desc">상·중·하위권 각 집단 내에서 학생들이 가장 약한 영역의 분포 (명)</div>
+      <div class="chart-box"><canvas id="tierWeak"></canvas></div>
+    </div>
+    <p style="font-size:14px;color:var(--ink-soft);margin-top:16px;margin-left:4px;">
+      · <b>상위권 11명</b> — 최약점 탐구 8명(73%), 3월과 동일 패턴 ·
+      <b>중위권 119명</b> — 수학 74명 압도적, 국어가 새 약점으로 부상(3월 40명 → 5월 37명, 그러나 약점 집단 규모는 증가) ·
+      <b>하위권 56명</b> — 수학·국어·영어 고른 분포
+    </p>
+  </div>
+</section>
+
+<!-- ============ 4 · 원인 ============ -->
+<section id="s4">
+  <div class="wrap">
+    <div class="sec-head"><div class="sec-num">4</div><h2 class="serif">원인 가설</h2></div>
+    <p class="sec-lead">5월 결과는 3월 약점이 그대로 재현되었음을 보여줍니다. 답지반응률 데이터를 추가 근거로 활용해 가설을 구체화합니다.</p>
+
+    <div class="three-col">
+      <div class="cause">
+        <h4>수업 측면</h4>
+        <div class="c-sub">정규 수업 운영 구조</div>
+        <ul>
+          <li>수학 정답률이 <b>15번 이후 D·E 집중</b> → 수업이 다룬 단원과 평가 변별 영역 매칭 부족, 후반부 유형 대비 시간 절대 부족</li>
+          <li>국어 비문학 후반 문항 정답률 50%대 정체 → <b>지문 구조 분석·시간 배분 훈련의 정착 실패</b></li>
+          <li>영어 30번대 변별 유형(빈칸·순서) 정답률 D → 추론형 유형의 체계적 훈련 부재</li>
+        </ul>
+      </div>
+      <div class="cause">
+        <h4>학습 측면</h4>
+        <div class="c-sub">학생 학습 습관·루틴</div>
+        <ul>
+          <li>3월 이후 수학 오답 재학습 루틴이 정착되지 않음 → <b>5월에 동일 패턴 반복</b>(상위권 추가 이탈)</li>
+          <li>국어 5등급 적체 신규 발생 → 중하위층의 자기주도 비문학 풀이량 부족</li>
+          <li>영어 호조에 대한 안일감 → 6월 모평 대비 변별 유형 훈련 동기 저하 위험</li>
+        </ul>
+      </div>
+      <div class="cause">
+        <h4>평가 대응 측면</h4>
+        <div class="c-sub">시험 전략·피드백 체계</div>
+        <ul>
+          <li>시험 후반부 시간 관리 훈련 부족 → 수학 21번 이후·국어 35번 이후 정답률 함몰</li>
+          <li>절대평가 영어의 <b>난도 변동 위험</b>에 대한 인식 부족 → 6월 모평에서 점수 급락 가능성</li>
+          <li>모의고사 후 영역별 오답 분석이 구조화되지 않음 → 3월 약점이 5월에 동일하게 재현</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 · 전략 ============ -->
+<section id="s5">
+  <div class="wrap">
+    <div class="sec-head"><div class="sec-num">5</div><h2 class="serif">수업 개선 전략</h2></div>
+    <p class="sec-lead">3월 보고서 전략을 5월 결과로 업데이트했습니다. 모든 전략은 실행 주기를 포함한 <b>행동 중심</b>으로 작성되었으며, 답지반응률 진단을 반영했습니다.</p>
+
+    <div class="card" style="border-left:4px solid var(--ink);">
+      <div class="chart-title">정규 수업 공통 전략 — 5월 결과 반영 강화</div>
+      <ul style="list-style:none;margin-top:10px;">
+        <li style="font-size:14.5px;margin-bottom:9px;padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--clay);font-weight:700;">·</span><b>수학</b> — 후반부(15번 이후) 유형 풀이 시간 매 차시 15분 확보, 4·5등급 빈출 단원(수열·미분응용·확통 자료해석) <b>주 4회</b></li>
+        <li style="font-size:14.5px;margin-bottom:9px;padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--clay);font-weight:700;">·</span><b>국어</b> — 비문학 35번 이후 변별 지문 구조 도식화 훈련 <b>주 2회 15분</b>, 풀이 시간 측정 의무화</li>
+        <li style="font-size:14.5px;margin-bottom:9px;padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--clay);font-weight:700;">·</span><b>영어</b> — 빈칸·순서·삽입(30번대) 유형 매주 1회 3문항 풀이 + 정답 근거 표시, <b>6월 난도 복귀 대비</b></li>
+        <li style="font-size:14.5px;padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--clay);font-weight:700;">·</span><b>공통</b> — 5월 학평 오답 클리닉 <b>1회기(2시간)</b> 영역별 운영. 미실행 시 6월 모평 동일 패턴 반복</li>
+      </ul>
+    </div>
+
+    <!-- 국어 -->
+    <div class="strat">
+      <div class="strat-head">
+        <div class="sh-name"><span>국어</span> 약점 집단 전략</div>
+        <div class="sh-size">85명 · 3월 대비 +16명, 최우선 신규 개입</div>
+      </div>
+      <div class="strat-body">
+        <div class="cell"><div class="c-cat">수업 전략</div><ul><li>비문학 후반 지문(35번 이후) 구조 도식화 훈련 <b>주 2회 15분</b>, 풀이 시간 측정 의무</li></ul></div>
+        <div class="cell"><div class="c-cat">심화 전략</div><ul><li>방과후 'EBS 연계 비문학 정복반' <b>주 2회</b> — 시간 압박 하 풀이</li></ul></div>
+        <div class="cell"><div class="c-cat">학습 코칭</div><ul><li><b>매일 비문학 1지문</b> + 풀이 시간 기록 + 오답 근거 재작성 <b>25분</b></li></ul></div>
+        <div class="cell"><div class="c-cat">온라인 활용</div><ul><li>EBSi 비문학 변별 문항 강의 <b>주 2회 20분</b> + 자가 분석 노트</li></ul></div>
+      </div>
+    </div>
+
+    <!-- 수학 -->
+    <div class="strat">
+      <div class="strat-head">
+        <div class="sh-name"><span>수학</span> 약점 집단 전략</div>
+        <div class="sh-size">117명 · 학년 최대, 최우선 개입 지속</div>
+      </div>
+      <div class="strat-body">
+        <div class="cell"><div class="c-cat">수업 전략</div><ul><li>매 차시 도입 10분 <b>'15번대 유형 1문항 풀이'</b> 루틴 주 4회 (3월 루틴 강화)</li></ul></div>
+        <div class="cell"><div class="c-cat">보충 전략</div><ul><li>방과후 수준별 보충반 <b>주 3회</b> — 미적분반(준킬러), 확통반(자료해석)</li></ul></div>
+        <div class="cell"><div class="c-cat">학습 코칭</div><ul><li><b>매일</b> 개념 15분 + 후반부 유형 2문항 + 오답 풀이과정 노트화</li></ul></div>
+        <div class="cell"><div class="c-cat">온라인 활용</div><ul><li>단원별 준킬러 유형강의 <b>주 3회 20분</b> + 오답노트 작성</li></ul></div>
+      </div>
+    </div>
+
+    <!-- 영어 -->
+    <div class="strat">
+      <div class="strat-head">
+        <div class="sh-name"><span>영어</span> 약점 집단 전략</div>
+        <div class="sh-size">36명 · 난도 하락 효과 · 6월 모평 위험 대비</div>
+      </div>
+      <div class="strat-body">
+        <div class="cell"><div class="c-cat">수업 전략</div><ul><li>30번대 변별 유형(빈칸·순서·삽입) 매주 1유형, 정답 근거 표시 <b>주 3회</b></li></ul></div>
+        <div class="cell"><div class="c-cat">기초 보완 전략</div><ul><li>방과후 '구문·어휘 보강반' <b>주 2회</b> — <b>6월 난도 복귀 대비</b></li></ul></div>
+        <div class="cell"><div class="c-cat">학습 코칭</div><ul><li><b>매일 변별 유형 2문항</b> + 오답 근거 재작성 <b>20분</b></li></ul></div>
+        <div class="cell"><div class="c-cat">온라인 활용</div><ul><li>빈칸추론 변별 강의 <b>주 3회 20분</b> + 오답노트</li></ul></div>
+      </div>
+    </div>
+
+    <!-- 탐구 -->
+    <div class="strat">
+      <div class="strat-head">
+        <div class="sh-name"><span>탐구</span> (사회·과학) 약점 집단 전략</div>
+        <div class="sh-size">58명 · 변동 없음, 개념 정착 우선</div>
+      </div>
+      <div class="strat-body">
+        <div class="cell"><div class="c-cat">수업 전략</div><ul><li>단원별 핵심 개념 '백지 인출' 차시 도입 10분 <b>주 2회</b></li></ul></div>
+        <div class="cell"><div class="c-cat">기초 보완 전략</div><ul><li>방과후 '생명·지구과학Ⅰ 개념 정복반' <b>주 2회</b> — 1등급 0~1명 과목 우선</li></ul></div>
+        <div class="cell"><div class="c-cat">학습 코칭</div><ul><li><b>매일</b> 1과목 개념노트 복습 15분 + 기출 5문항</li></ul></div>
+        <div class="cell"><div class="c-cat">온라인 활용</div><ul><li>EBS 단원강의 <b>주 2회</b>, 모의고사 1주 전 전 단원 속성 복습</li></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 · 다층 ============ -->
+<section id="s6">
+  <div class="wrap">
+    <div class="sec-head"><div class="sec-num">6</div><h2 class="serif">다층 개입 전략</h2></div>
+    <p class="sec-lead">상·중·하위권 각 권역의 5월 결과 기반 핵심 과제는 다릅니다. 권역별로 [수업 / 보충 / 코칭 / 온라인] 4축을 분리해 적용합니다.</p>
+
+    <div class="tier-grid">
+      <div class="tier t-top">
+        <div class="tier-top">
+          <div class="tt-name">상위권</div>
+          <div class="tt-meta">11명 · 5.9% — 최약점 탐구(8/11명)</div>
+        </div>
+        <div class="tier-body">
+          <div class="tb-block"><div class="tb-cat">수업</div><div class="tb-text">정규 수업 내 준킬러·킬러 문항 별도 과제, <b>주 2회</b> 심화 토론</div></div>
+          <div class="tb-block"><div class="tb-cat">보충</div><div class="tb-text">탐구 심화반 <b>주 2회</b> — 8/11명이 탐구 최약점</div></div>
+          <div class="tb-block"><div class="tb-cat">코칭</div><div class="tb-text"><b>주간</b> 영역별 목표 표준점수 설정·점검, 수학 1등급 사수</div></div>
+          <div class="tb-block"><div class="tb-cat">온라인</div><div class="tb-text">최상위 N제·고난도 강의 <b>주 3회</b>, 실전 모의고사 <b>주 1회</b></div></div>
+        </div>
+      </div>
+
+      <div class="tier t-mid">
+        <div class="tier-top">
+          <div class="tt-name">중위권</div>
+          <div class="tt-meta">119명 · 64.0% — 수학 후반부 + 국어 5등급 적체</div>
+        </div>
+        <div class="tier-body">
+          <div class="tb-block"><div class="tb-cat">수업</div><div class="tb-text">수학 후반부 + 국어 비문학 후반 훈련을 정규 수업 결합 <b>주 4회</b></div></div>
+          <div class="tb-block"><div class="tb-cat">보충</div><div class="tb-text">수학 4등급 보충반 <b>주 3회</b>, 국어 비문학 정복반 <b>주 2회</b></div></div>
+          <div class="tb-block"><div class="tb-cat">코칭</div><div class="tb-text"><b>매일</b> 수학 후반 유형 2문항 + 비문학 1지문 시간 측정</div></div>
+          <div class="tb-block"><div class="tb-cat">온라인</div><div class="tb-text">준킬러 강의 <b>주 3회 20분</b> + 오답노트</div></div>
+        </div>
+      </div>
+
+      <div class="tier t-low">
+        <div class="tier-top">
+          <div class="tt-name">하위권</div>
+          <div class="tt-meta">56명 · 30.1% — 전 영역 기초 결손, 영어 난도 복귀 대비</div>
+        </div>
+        <div class="tier-body">
+          <div class="tb-block"><div class="tb-cat">수업</div><div class="tb-text">2·3점 기본 문항 완답 목표, 개념 예제 반복 <b>주 4회</b></div></div>
+          <div class="tb-block"><div class="tb-cat">보충</div><div class="tb-text">과목별 기초개념반 <b>주 3회</b> — 영어 어휘·구문 우선</div></div>
+          <div class="tb-block"><div class="tb-cat">코칭</div><div class="tb-text"><b>매일</b> 1과목 집중 60분(개념 30 + 쉬운 문제 30)</div></div>
+          <div class="tb-block"><div class="tb-cat">온라인</div><div class="tb-text">기초 개념강의 <b>주 3회</b> + 진도 체크리스트 가시화</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7 · 4주 ============ -->
+<section id="s7">
+  <div class="wrap">
+    <div class="sec-head"><div class="sec-num">7</div><h2 class="serif">단기 실행 계획 (4주, 6월 모평 대비)</h2></div>
+    <p class="sec-lead">5월 학평 결과 → 즉각 개입 → 6월 모평 검증의 사이클을 4주로 압축합니다.</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">1주</div>
+        <h4>5월 결과 진단 및 재편성</h4>
+        <p>5월 학평 영역별 오답 클리닉 실시, 국어 신규 약점 85명을 반영한 약점 집단 재편성, 코칭 점검표 갱신</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">2주</div>
+        <h4>전략 즉시 적용</h4>
+        <p>수학 후반부 루틴·국어 비문학 후반 훈련을 정규 수업에 적용, 방과후 보충반 재개강(특히 국어 비문학 정복반 신설)</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">3주</div>
+        <h4>중간 점검</h4>
+        <p>수학 15번 이후 유형 + 국어 비문학 변별 미니 진단지 실시, 오답 클리닉 운영, 학습 코칭 점검표 회수·피드백</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">4주</div>
+        <h4>6월 모평 대비 주간</h4>
+        <p>전 영역 속성 복습, 영어 변별 유형 집중 점검(난도 복귀 대비), 6월 모평 응시 — 본 분석틀로 효과 검증</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8 · 중장기 ============ -->
+<section id="s8">
+  <div class="wrap">
+    <div class="sec-head"><div class="sec-num">8</div><h2 class="serif">중장기 개선 방향</h2></div>
+    <p class="sec-lead">3월→5월에 동일 약점이 재현되었다는 사실 자체가 단기 개입만으로 부족함을 시사합니다. 학교 시스템 차원의 정착이 필요합니다.</p>
+
+    <div class="lt-grid">
+      <div class="lt">
+        <h4>수학 후반부 정복 체제</h4>
+        <p><b>4~5등급 과밀(61.3%)</b>을 학기 단위 핵심 지표로 추적, 15번 이후 단원 학습 시간 정규화</p>
+      </div>
+      <div class="lt">
+        <h4>국어 5등급 적체 해소</h4>
+        <p>신규 발생 <b>5등급(25.8%)</b>의 비문학 시간 관리 훈련 제도화, 매주 풀이 시간 기록 의무화</p>
+      </div>
+      <div class="lt">
+        <h4>영어 변별 유형 트랙</h4>
+        <p>절대평가 난도 변동에 대비, 빈칸·순서 등 D등급 유형 상시 훈련 — 6월 모평 결과로 효과 검증</p>
+      </div>
+      <div class="lt">
+        <h4>탐구 개념 조기 완성</h4>
+        <p>생명과학Ⅰ <b>1등급 0명 현상이 3월·5월 연속 재현</b> — 2학년 겨울 1회독 의무화로 차단</p>
+      </div>
+      <div class="lt" style="grid-column:1/-1;border-left-color:var(--clay);">
+        <h4>평가 피드백 루프 제도화</h4>
+        <p>학평마다 본 분석틀(3월 vs 5월 비교 + 답지반응률 진단)로 추적해 약점의 재현을 차단. <b>'3월 약점 → 5월 약점'의 직접 재생산 패턴</b>이 본 데이터로 확인되었으므로, 모든 학평 직후 영역별 오답 분석을 학교 차원 의무 루틴으로 정착.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="co-mark serif">›</div>
+      <p>본 5월 보고서의 핵심 메시지 — <b>수학 구조 추가 악화</b>와 <b>국어 5등급 적체 신규 발생</b>은 학교 고유의 추세이며, 영어 호조는 시험 난도 하락에 따른 일시 효과입니다. <b>6월 모평을 1차 검증 시점</b>으로 삼아 즉각적인 수업·보충·코칭·온라인 4축 전략을 실행해야 합니다.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>2026학년도 5월 전국연합학력평가 분석 · 경주여자고등학교 3학년</div>
+    <div>교과협의회 자료 · 3월 학평 대비 · 답지반응률 기반 · 응시 186명</div>
+  </div>
+</footer>
+
+<script>
+const ink='#1c1a17', inkSoft='#43403a', clay='#a8442a', claySoft='#c96b4f',
+      teal='#1f5d56', gold='#b4862f', navy='#26354d', line='#d8ceb8', paper2='#ebe3d4',
+      up='#1f5d56', down='#a8442a';
+Chart.defaults.font.family="'Pretendard',sans-serif";
+Chart.defaults.color=inkSoft;
+Chart.defaults.font.size=12;
+
+/* ========== 0. delta chart (3월→5월 등급별 변화량) ========== */
+const labels9=['1','2','3','4','5','6','7','8','9'];
+// 5월 - 3월 (학교 기준)
+const dKor=[0.56,0.07,-3.65,-3.08,8.16,-2.07,0.02,-0.53,0.54];
+const dMat=[0.01,-2.65,-1.55,3.37,1.77,-0.46,3.25,-1.59,-2.13];
+const dEng=[5.92,7.07,4.45,-8.46,-9.05,-1.03,0.55,0.01,0.54];
+const dHis=[-0.48,-0.48,3.85,10.84,-2.59,-10.10,0.04,-1.07,0.00];
+new Chart(document.getElementById('deltaChart'),{
+  type:'bar',
+  data:{labels:labels9,
+    datasets:[
+      {label:'국어',data:dKor,backgroundColor:clay,borderRadius:3,barPercentage:.8,categoryPercentage:.84},
+      {label:'수학',data:dMat,backgroundColor:navy,borderRadius:3,barPercentage:.8,categoryPercentage:.84},
+      {label:'영어',data:dEng,backgroundColor:teal,borderRadius:3,barPercentage:.8,categoryPercentage:.84},
+      {label:'한국사',data:dHis,backgroundColor:gold,borderRadius:3,barPercentage:.8,categoryPercentage:.84}
+    ]},
+  options:{maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{padding:14}},
+      tooltip:{callbacks:{title:c=>c[0].label+'등급',
+        label:c=>c.dataset.label+': '+(c.raw>0?'+':'')+c.raw.toFixed(2)+'%p'}}},
+    scales:{y:{grid:{color:line},
+      ticks:{callback:v=>(v>0?'+':'')+v+'%p'},
+      title:{display:true,text:'3월 대비 변화량(%p)',color:'#8a8170'}},
+      x:{grid:{display:false},title:{display:true,text:'등급',color:'#8a8170'}}}}
+});
+
+/* ========== 1. donut ========== */
+new Chart(document.getElementById('tierDonut'),{
+  type:'doughnut',
+  data:{labels:['상위권 (11명)','중위권 (119명)','하위권 (56명)'],
+    datasets:[{data:[11,119,56],backgroundColor:[teal,navy,clay],borderColor:'#fbf8f1',borderWidth:3}]},
+  options:{cutout:'58%',plugins:{legend:{position:'bottom',labels:{padding:14,font:{size:12.5}}},
+    tooltip:{callbacks:{label:c=>c.label+' · '+(c.raw/186*100).toFixed(1)+'%'}}}}
+});
+
+/* ========== 1b. std bar ========== */
+new Chart(document.getElementById('stdBar'),{
+  type:'bar',
+  data:{labels:['국어','수학','탐구'],
+    datasets:[
+      {label:'우리 학교 (5월)',data:[109.9,102.3,55.5],backgroundColor:clay,borderRadius:4,barPercentage:.62},
+      {label:'우리 학교 (3월)',data:[109.4,103.4,55.1],backgroundColor:'#d99e89',borderRadius:4,barPercentage:.62},
+      {label:'전국',data:[100,100,50],backgroundColor:paper2,borderColor:line,borderWidth:1,borderRadius:4,barPercentage:.62}
+    ]},
+  options:{maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{padding:12}}},
+    scales:{y:{beginAtZero:false,suggestedMin:40,grid:{color:line}},x:{grid:{display:false}}}}
+});
+
+/* ========== 2. 과목별 등급 분포 (5월 학교 vs 전국) ========== */
+function distChart(id,school,nat,cMain,cLight){
+  new Chart(document.getElementById(id),{
+    type:'bar',
+    data:{labels:labels9,
+      datasets:[
+        {label:'우리 학교',data:school,backgroundColor:cMain,borderRadius:3,
+         barPercentage:.78,categoryPercentage:.84},
+        {label:'전국',data:nat,backgroundColor:cLight,borderRadius:3,
+         barPercentage:.78,categoryPercentage:.84}
+      ]},
+    options:{maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{padding:10,boxWidth:12,font:{size:11.5}}},
+        tooltip:{callbacks:{title:c=>c[0].label+'등급',
+          label:c=>c.dataset.label+': '+c.raw+'%'}}},
+      scales:{y:{beginAtZero:true,grid:{color:line},ticks:{callback:v=>v+'%'}},
+        x:{grid:{display:false},title:{display:true,text:'등급',font:{size:11},color:'#8a8170'}}}}
+  });
+}
+/* 주요 4과목 */
+distChart('gd_kor',[4.30,11.83,17.74,24.19,25.81,11.83,3.76,0,0.54],
+  [4.26,7.04,11.99,16.81,20.89,16.89,11.54,7.47,3.10],clay,'#e3c9bf');
+distChart('gd_mat',[1.08,4.30,10.75,31.18,30.11,13.44,7.53,1.08,0.54],
+  [4.31,8.04,10.95,16.90,20.26,18.89,11.44,6.07,3.12],navy,'#c2cad6');
+distChart('gd_eng',[8.06,21.51,31.72,19.35,6.99,6.99,3.76,1.08,0.54],
+  [9.24,13.87,19.61,17.48,11.62,8.65,7.71,7.07,4.74],teal,'#bcccc9');
+distChart('gd_his',[9.68,10.22,18.82,26.88,15.59,11.83,6.99,0,0],
+  [6.43,8.98,13.43,16.35,16.63,14.43,16.26,6.37,1.13],gold,'#e6d4ad');
+
+/* 탐구 */
+const TC=clay, TL='#e3c9bf';
+distChart('td_sm',[9.47,13.68,18.95,27.37,15.79,9.47,2.11,3.16,0],
+  [5.61,6.79,13.55,16.42,19.82,16.57,11.98,6.85,2.42],TC,TL);
+distChart('td_le',[11.11,13.89,25.00,20.83,18.06,5.56,2.78,1.39,1.39],
+  [4.83,8.29,11.90,17.06,18.18,17.84,11.20,7.80,2.90],TC,TL);
+distChart('td_bio',[0,4.26,31.91,12.77,31.91,12.77,4.26,2.13,0],
+  [4.17,8.63,11.58,18.77,19.20,15.57,12.19,6.66,3.23],TC,TL);
+distChart('td_es',[2.33,2.33,9.30,25.58,27.91,16.28,9.30,4.65,2.33],
+  [5.19,8.95,9.13,18.38,22.88,14.07,13.03,4.68,3.69],TC,TL);
+distChart('td_kg',[27.78,22.22,16.67,11.11,13.89,2.78,5.56,0,0],
+  [4.41,6.87,13.88,15.10,25.00,13.91,13.96,3.10,3.77],TC,TL);
+distChart('td_wg',[12.00,8.00,28.00,16.00,24.00,0,4.00,8.00,0],
+  [7.23,5.01,10.89,18.06,21.08,16.34,12.25,5.98,3.16],TC,TL);
+distChart('td_ep',[28.57,14.29,0,38.10,19.05,0,0,0,0],
+  [4.43,9.71,10.10,17.99,20.16,14.77,13.64,5.38,3.82],TC,TL);
+distChart('td_pl',[30.00,0,50.00,20.00,0,0,0,0,0],
+  [6.76,5.60,12.61,16.54,20.00,17.65,16.55,1.36,2.93],TC,TL);
+distChart('td_ch',[0,0,42.86,28.57,28.57,0,0,0,0],
+  [4.27,8.97,10.61,16.42,21.23,17.08,16.01,1.85,3.56],TC,TL);
+distChart('td_ws',[0,0,33.33,16.67,16.67,33.33,0,0,0],
+  [5.49,6.90,11.45,16.56,21.99,20.69,10.95,2.81,3.15],TC,TL);
+
+/* ========== 3. 약점 집단 3월 vs 5월 비교 ========== */
+new Chart(document.getElementById('weakCompare'),{
+  type:'bar',
+  data:{labels:['수학','국어','탐구','영어'],
+    datasets:[
+      {label:'3월',data:[111,69,58,54],backgroundColor:'#d99e89',borderRadius:4,barPercentage:.78,categoryPercentage:.7},
+      {label:'5월',data:[117,85,58,36],backgroundColor:clay,borderRadius:4,barPercentage:.78,categoryPercentage:.7}
+    ]},
+  options:{maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{padding:14}},
+      tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+'명'}}},
+    scales:{y:{beginAtZero:true,grid:{color:line},title:{display:true,text:'학생 수(명)',color:'#8a8170'}},x:{grid:{display:false}}}}
+});
+
+/* ========== 3b. 권역별 최약점 ========== */
+new Chart(document.getElementById('tierWeak'),{
+  type:'bar',
+  data:{labels:['상위권 (11명)','중위권 (119명)','하위권 (56명)'],
+    datasets:[
+      {label:'수학',data:[2,74,31],backgroundColor:clay},
+      {label:'국어',data:[1,37,23],backgroundColor:navy},
+      {label:'영어',data:[0,9,14],backgroundColor:teal},
+      {label:'탐구',data:[8,37,10],backgroundColor:gold}
+    ]},
+  options:{maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{padding:14}},
+      tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+'명'}}},
+    scales:{x:{stacked:true,grid:{display:false}},
+      y:{stacked:true,beginAtZero:true,grid:{color:line},title:{display:true,text:'학생 수(명, 중복 포함)',color:'#8a8170'}}}}
+});
+</script>
+</body>
+</html>
