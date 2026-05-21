@@ -57,6 +57,29 @@
     .card h2 { font-size: 1.05rem; font-weight: 700; line-height: 1.4; }
     .card p  { margin-top: 8px; font-size: 0.85rem; color: #666; }
     footer { margin-top: 56px; font-size: 0.8rem; color: #aaa; }
+    .qr-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 44px;
+    }
+    .qr-block img {
+      width: 380px;
+      height: 380px;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      display: block;
+    }
+    .qr-block p {
+      font-size: 0.9rem;
+      color: #555;
+      text-align: center;
+      line-height: 1.6;
+    }
+    @media (max-width: 480px) {
+      .qr-block img { width: 240px; height: 240px; }
+    }
   </style>
 </head>
 
@@ -65,6 +88,11 @@
     <h1>2026 모의고사 분석 보고서</h1>
     <p>경주여자고등학교</p>
   </header>
+
+  <div class="qr-block">
+    <img src="28ARP.png" alt="보고서 QR코드">
+    <p>QR코드를 스캔하면 휴대폰으로 바로 열 수 있습니다.</p>
+  </div>
 
   <div class="grid">
     <a class="card" href="2026_1학년_3월모의고사_분석보고서.html">
